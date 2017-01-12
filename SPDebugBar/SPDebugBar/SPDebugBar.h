@@ -46,7 +46,7 @@ typedef void (^SPArrayResultBlock)(NSArray* objects, NSError* error);
 
  8.如果添加的地址太多了，可以清除手动输入增加的地址，恢复成给定的地址列表。
 
- 9.本小工具可以预先给定多组服务器地址，一组两组三组，等都可以。
+ 9.本小工具可以预先给定多组服务器地址，一组两组三组等都可以，方便不同业务接口使用多个服务地址，如果组数有变动，则数据全部重置，之前手动输入添加的不保留，而且应用刚启动时返回的取每组第一个。
  
  10.使用方法，例如：
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions

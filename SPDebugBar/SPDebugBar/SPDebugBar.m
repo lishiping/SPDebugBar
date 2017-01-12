@@ -12,7 +12,7 @@
 
 @property (strong, nonatomic) UILabel* tipLabel;
 @property (strong, nonatomic) NSTimer* monitorTimer;
-@property (strong, nonatomic) NSArray *serverArray;
+@property (copy, nonatomic) NSArray *serverArray;
 @property (copy, nonatomic) SPArrayResultBlock selectArrayBlock; //选择的服务地址回调
 
 @end
@@ -90,7 +90,7 @@ static SPDebugBar* instance = nil;
     else
     {
         //服务器地址合法返回本地缓存选择过得地址，没有选择过得地址，默认选择每一组的第一个作为该组的选中地址
-        NSArray *selectArr =[SPServerListVC getSelectArrayWithServerArray:serverArray];
+        NSArray *selectArr =[SPServerListVC getSelectArrayWithServerArray:_serverArray];
         
         if (self.selectArrayBlock&&selectArr.count>0) {
             self.selectArrayBlock([selectArr copy],nil);

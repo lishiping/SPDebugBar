@@ -54,7 +54,7 @@
                                    @"http://api.pan.baidu.com",
                                    @"http://api.ceshi.pan.baidu.com"
                                    ];
-        
+
         NSArray *serverArray = [NSArray arrayWithObjects:serverArr,panServerArr, nil];
         
         [[SPDebugBar sharedInstanceWithFrame:CGRectMake(CGRectGetWidth([UIScreen mainScreen].bounds)-250, 0, 250, 20)] initwithServerArray:serverArray selectArrayBlock:^(NSArray *objects, NSError *error){

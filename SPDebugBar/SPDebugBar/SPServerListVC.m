@@ -27,11 +27,30 @@
     
     [self.view addSubview:self.tableView];
     
+    [self configCopyRightInfo];
+    
     [self addButtonItem];
+    
+    [self selectMArr];
     
     [self serverMArr];
     
-    [self selectMArr];
+    
+}
+
+#pragma mark - copyright info
+-(void)configCopyRightInfo
+{
+    UIView *tableFooterView =[[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(_tableView.frame), 300)];
+    
+    UILabel *authorLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 250, CGRectGetWidth(_tableView.frame), 30)];
+    authorLabel.textColor = [UIColor darkGrayColor];
+    authorLabel.text = @"Author:lishiping(李世平)  e-mail:83118274@qq.com";
+    [authorLabel setFont:[UIFont systemFontOfSize:12]];
+    authorLabel.textAlignment = NSTextAlignmentCenter;
+    [tableFooterView addSubview:authorLabel];
+    
+    self.tableView.tableFooterView = tableFooterView;
     
 }
 
@@ -39,9 +58,9 @@
 {
     NSMutableArray *selectMArr = [NSMutableArray arrayWithCapacity:0];
     
-    //如果有缓存,先取缓存内的
     NSArray *oldSelectArr = [[NSUserDefaults standardUserDefaults] objectForKey:SELECTSERVERLIST];
-    if (oldSelectArr.count>0) {
+    //如果有缓存,先取缓存内的,同时缓存内的个数要与给定的组数相同，如果不相同，说明给定的组数变了，要全部重置
+    if (oldSelectArr.count>0&&oldSelectArr.count==serverArr.count) {
         selectMArr = [NSMutableArray arrayWithArray:oldSelectArr];
         return selectMArr;
     }
@@ -66,6 +85,7 @@
     //写入本地缓存
     if (selectMArr.count>0) {
         [[NSUserDefaults standardUserDefaults]  setObject:[selectMArr copy] forKey:SELECTSERVERLIST];
+        [[NSUserDefaults standardUserDefaults]  setObject:[serverArr copy] forKey:DEBUGSERVERLIST];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
@@ -101,6 +121,7 @@
 
 - (void)confirm
 {
+    [self.view endEditing:YES];
     if (self.selectMArr.count>0) {
         
         [[NSUserDefaults standardUserDefaults]  setObject:[self.selectMArr copy] forKey:SELECTSERVERLIST];
@@ -136,6 +157,10 @@
         _serverMArr = [NSMutableArray arrayWithArray:temp];
         if (_serverMArr.count==0) {
             _serverMArr = [NSMutableArray arrayWithArray:_tempserverArr];
+            if (_serverMArr.count>0) {
+                [[NSUserDefaults standardUserDefaults] setObject:[_tempserverArr copy] forKey:DEBUGSERVERLIST];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
         }
     }
     return _serverMArr;
@@ -144,7 +169,7 @@
 -(NSMutableArray*)selectMArr
 {
     if (!_selectMArr) {
-        NSArray *tem = [[self class] getSelectArrayWithServerArray:[self.serverMArr copy]];
+        NSArray *tem = [[self class] getSelectArrayWithServerArray:[_tempserverArr copy]];
         _selectMArr = [NSMutableArray arrayWithArray:tem];
     }
     return _selectMArr;
@@ -158,8 +183,6 @@
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.separatorInset = UIEdgeInsetsZero;
-        _tableView.tableFooterView = [[UIView alloc] init];
-
     }
     return _tableView;
 }
@@ -190,9 +213,23 @@
 
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
+    [self.view endEditing:YES];
+    
     UITextField *text = [tableView viewWithTag:(indexPath.section +200)];
-    text.text  =[[self.serverMArr objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-    [self.selectMArr replaceObjectAtIndex:indexPath.section withObject:text.text];
+    //有时候该方法找不到text，所以在tableview的subviews里面找
+    if (!text) {
+        for (UIView *subview in tableView.subviews) {
+            text =[subview viewWithTag:(indexPath.section +200)];
+            if (text&&[text isKindOfClass:[UITextField class]]) {
+                break;
+            }
+        }
+    }
+    
+    if (text.text.length>0) {
+        text.text  =[[self.serverMArr objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+        [self.selectMArr replaceObjectAtIndex:indexPath.section withObject:text.text];
+    }
 }
 
 - (void)tableView:(UITableView*)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath*)indexPath
@@ -212,7 +249,7 @@
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
     UIView *headView =  [[UIView alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(tableView.frame), 60)];
-    headView.backgroundColor = [UIColor grayColor];
+    headView.backgroundColor = [UIColor lightGrayColor];
     
     UILabel *headLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, CGRectGetWidth(tableView.frame), 20)];
     headLabel.textColor = [UIColor yellowColor];
@@ -220,9 +257,13 @@
     
     [headView addSubview:headLabel];
     
-    UITextField *headTextField = [[UITextField alloc] initWithFrame:CGRectMake(10, 20, CGRectGetWidth(tableView.frame), 40)];
+    UITextField *headTextField = [[UITextField alloc] initWithFrame:CGRectMake(10, 20, CGRectGetWidth(tableView.frame)-10, 40)];
     headTextField.tag = section+200;
+    NSLog(@"输入框tag%ld",(long)headTextField.tag);
     headTextField.textColor = [UIColor greenColor];
+    headTextField.textAlignment = NSTextAlignmentLeft;
+    headTextField.placeholder = @"Input URL!!";
+    headTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
     headTextField.text = [self.selectMArr objectAtIndex:section];
     headTextField.delegate = self;
     [headView addSubview:headTextField];

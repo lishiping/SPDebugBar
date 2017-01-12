@@ -4,6 +4,7 @@
 #A tool to help developers and testers quickly switch the server address, convenient to debug the program.一个小工具帮助开发人员和测试人员快速切换服务器地址，方便调试程序，可以在debug模式下或者测试包上方便切换地址
 
 /**
+A tool to help developers and testers quickly switch the server address, convenient to debug the program.一个小工具帮助开发人员和测试人员快速切换服务器地址，方便调试程序，可以在debug模式下或者测试包上方便切换地址
 
 1.本工具的功能作用：在给定的服务器地址间切换，并且通过block返回选中的地址方便开发者和测试人员在使用APP的时候可以切换服务器地址的小工具。
 
@@ -21,7 +22,7 @@
 
 8.如果添加的地址太多了，可以清除手动输入增加的地址，恢复成给定的地址列表。
 
-9.本小工具可以预先给定多组服务器地址，一组两组三组，等都可以。
+9.本小工具可以预先给定多组服务器地址，一组两组三组等都可以，方便不同业务接口使用多个服务地址，如果组数有变动，则数据全部重置，之前手动输入添加的不保留，而且应用刚启动时返回的取每组第一个。
 
 10.使用方法，例如：
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -57,7 +58,6 @@ NSLog(@"选中的服务器地址：%@",objects);
 }
 #endif
 }
-
 
 
 @param serverArray      给定服务器地址列表
