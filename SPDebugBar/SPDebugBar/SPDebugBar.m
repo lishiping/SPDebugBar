@@ -139,7 +139,7 @@ static SPDebugBar* instance = nil;
     }
     
     //Memory
-    NSString* memoryInfo = [NSString stringWithFormat:@"Memory:%.1fM/%luM", (float)[device freeMemoryBytes] / 1024.0 / 1024.0,(unsigned long)[device totalMemoryBytes] / 1024 / 1024];
+    NSString* memoryInfo = [NSString stringWithFormat:@"Memory:%.1fM/%.1fM", (double)[device usedMemoryBytes],(double)[device totalMemoryBytes] / 1024.0 / 1024.0];
     
     _tipLabel.text = [NSString stringWithFormat:@"%@  %@", cpuInfo, memoryInfo];
 }

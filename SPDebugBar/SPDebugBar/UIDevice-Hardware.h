@@ -114,6 +114,9 @@ typedef enum {
 
 - (NSUInteger) totalMemoryBytes;    //获取手机内存总量,返回的是字节数
 - (NSUInteger) freeMemoryBytes;     //获取手机可用内存,返回的是字节数
+- (double) usedMemoryBytes;     //获取手机使用内存,返回的是MB
+- (vm_size_t) usedMemory;     //获取手机使用内存,返回的是字节数
+- (vm_size_t) freeMemory;     //获取手机可用内存,返回的是字节数
 
 - (long long) freeDiskSpaceBytes;   //获取手机硬盘空闲空间,返回的是字节数
 - (long long) totalDiskSpaceBytes;  //获取手机硬盘总空间,返回的是字节数
