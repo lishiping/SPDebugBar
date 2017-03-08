@@ -130,13 +130,11 @@ static SPDebugBar* instance = nil;
 - (void)refreshDeviceInfo
 {
     UIDevice* device = [UIDevice currentDevice];
-    NSArray* cpuUsage = [device cpuUsage];
+    float cpu = [device cpuUsagePercentage];
     
     //CPU
     NSMutableString* cpuInfo = [NSMutableString stringWithFormat:@"CPU:"];
-    for (NSNumber* cpu in cpuUsage) {
-        [cpuInfo appendString:[NSString stringWithFormat:@"%.1f%% ", [cpu floatValue]]];
-    }
+    [cpuInfo appendString:[NSString stringWithFormat:@"%.1f%% ", cpu*100]];
     
     //Memory
     NSString* memoryInfo = [NSString stringWithFormat:@"Memory:%.1fM/%.1fM", (double)[device usedMemoryBytes],(double)[device totalMemoryBytes] / 1024.0 / 1024.0];

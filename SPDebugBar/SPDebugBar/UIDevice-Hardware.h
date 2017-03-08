@@ -112,6 +112,9 @@ typedef enum {
 - (NSUInteger) cpuCount;            //cpu核数
 - (NSArray *) cpuUsage;                 //cpu利用率
 
+/// Current thread CPU usage, 1.0 means 100%. (-1 when error occurs)
+- (float)cpuUsagePercentage;           //cpu利用率
+
 - (NSUInteger) totalMemoryBytes;    //获取手机内存总量,返回的是字节数
 - (NSUInteger) freeMemoryBytes;     //获取手机可用内存,返回的是字节数
 - (double) usedMemoryBytes;     //获取手机使用内存,返回的是MB
