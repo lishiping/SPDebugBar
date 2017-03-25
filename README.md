@@ -4,7 +4,27 @@
 #A tool to help developers and testers quickly switch the server address, convenient to debug the program.一个小工具帮助开发人员和测试人员快速切换服务器地址，方便调试程序，可以在debug模式下或者测试包上方便切换地址
 
 /**
-A tool to help developers and testers quickly switch the server address, convenient to debug the program.一个小工具帮助开发人员和测试人员快速切换服务器地址，方便调试程序，可以在debug模式下或者测试包上方便切换地址
+A small tool to help developers and testers quickly switch the server address, convenient debug program, can be in debug mode or switching convenient test package on the address of the server
+
+1. The functions of this tool: in a given switching between the address of the server, and back to the selected address by block for developers and testers can switch the server address when using the APP widgets.
+
+2. The application to start, check the server address is correct, if not correct, return an error.
+
+3. The application starts, before returning to local saved before the selected address (the default option for the first time in each group first)
+
+4. After the application can grow according to debug the popup switch by selecting address list.
+
+5. After the popup list, also can click on the selected green one server address, actual it is UItextfield that can input, online press enter, you can manually add a new server address, at the same time, the current input the list to join this group.
+
+6. Click the debug debugging to hide and display text (debug message is CPU and memory usage.)
+
+7. When received memory warning debug will change color.
+
+8. If you add the address of too many, can remove manually enter the additional address, back to the given address list.
+
+9. This little tool can be given more set in advance the address of the server, a set of three groups of the two groups can, such as convenient and different business interface using multiple service address, if group number has changed, the data reset, all previously entered manually add do not retain, and application has just started to return to take each group first.
+
+10.Method of use, such as:
 
 1.本工具的功能作用：在给定的服务器地址间切换，并且通过block返回选中的地址方便开发者和测试人员在使用APP的时候可以切换服务器地址的小工具。
 
@@ -60,6 +80,9 @@ NSLog(@"选中的服务器地址：%@",objects);
 }
 
 
-@param serverArray      给定服务器地址列表
-@param selectArrayBlock 返回选中的服务器地址，数组元素的第一个是给定的服务器地址第一组里面被选中的，数组元素第二个为给定服务器地址中第二组里面被选中的，以此类推
+@param serverArray      Given the address of the server list(给定服务器地址列表)
+
+@param selectArrayBlock Returns the selected server address, the first array element is given the address of the server are to be selected the first set of array elements, the second for a given inside the second group is selected in the address of the server, and so on
+(返回选中的服务器地址，数组元素的第一个是给定的服务器地址第一组里面被选中的，数组元素第二个为给定服务器地址中第二组里面被选中的，以此类推)
 */
+

@@ -12,23 +12,43 @@ typedef void (^SPArrayResultBlock)(NSArray* objects, NSError* error);
 @interface SPDebugBar : UIWindow
 
 /**
+ Singleton, debugbar of default on the top right corner
  Singleton单例，调试条默认放在右上角
  */
 + (id)sharedInstance;
 
 
 /**
+ Singleton, the method can custom debugbar of the position
  singleton单例，该方法可以自定义调试条的位置
-
- @param frame 自定义给定的frame
-
- @return 返回代理
  */
 + (id)sharedInstanceWithFrame:(CGRect)frame;
 
 
 /**
- A tool to help developers and testers quickly switch the server address, convenient to debug the program.一个小工具帮助开发人员和测试人员快速切换服务器地址，方便调试程序，可以在debug模式下或者测试包上方便切换地址
+ A small tool to help developers and testers quickly switch the server address, convenient debug program, can be in debug mode or switching convenient test package on the address of the server
+ 
+ 1. The functions of this tool: in a given switching between the address of the server, and back to the selected address by block for developers and testers can switch the server address when using the APP widgets.
+ 
+ 2. The application to start, check the server address is correct, if not correct, return an error.
+ 
+ 3. The application starts, before returning to local saved before the selected address (the default option for the first time in each group first)
+ 
+ 4. After the application can grow according to debug the popup switch by selecting address list.
+ 
+ 5. After the popup list, also can click on the selected green one server address, actual it is UItextfield that can input, online press enter, you can manually add a new server address, at the same time, the current input the list to join this group.
+ 
+ 6. Click the debug debugging to hide and display text (debug message is CPU and memory usage.)
+ 
+ 7. When received memory warning debug will change color.
+ 
+ 8. If you add the address of too many, can remove manually enter the additional address, back to the given address list.
+ 
+ 9. This little tool can be given more set in advance the address of the server, a set of three groups of the two groups can, such as convenient and different business interface using multiple service address, if group number has changed, the data reset, all previously entered manually add do not retain, and application has just started to return to take each group first.
+ 
+ 10.Method of use, such as:
+ 
+ 一个小工具帮助开发人员和测试人员快速切换服务器地址，方便调试程序，可以在debug模式下或者测试包上方便切换服务器地址
  
  1.本工具的功能作用：在给定的服务器地址间切换，并且通过block返回选中的地址方便开发者和测试人员在使用APP的时候可以切换服务器地址的小工具。
  
@@ -36,7 +56,7 @@ typedef void (^SPArrayResultBlock)(NSArray* objects, NSError* error);
  
  3.应用开始启动，返回之前本地保存的之前选中的地址（第一次默认选择每组的第一个）
  
- 4.应用启动之后可以长按活动调试条弹出地址列表进行选择切换。
+ 4.应用启动之后可以长按调试条弹出地址列表进行选择切换。
  
  5.弹出列表之后，也可以点击绿色被选中的那条服务器地址，实际是UItextfield可以在线输入，回车，就可以手动加入一条新的服务器地址，同时把当前输入的这条加入到该组的列表中。
  
@@ -47,6 +67,7 @@ typedef void (^SPArrayResultBlock)(NSArray* objects, NSError* error);
  8.如果添加的地址太多了，可以清除手动输入增加的地址，恢复成给定的地址列表。
 
  9.本小工具可以预先给定多组服务器地址，一组两组三组等都可以，方便不同业务接口使用多个服务地址，如果组数有变动，则数据全部重置，之前手动输入添加的不保留，而且应用刚启动时返回的取每组第一个。
+ 
  
  10.使用方法，例如：
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -76,17 +97,18 @@ typedef void (^SPArrayResultBlock)(NSArray* objects, NSError* error);
  NSArray *serverArray = [NSArray arrayWithObjects:serverArr,panServerArr, nil];
  
  [[SPDebugBar sharedInstance] initwithServerArray:serverArray selectArrayBlock:^(NSArray *objects, NSError *error){
- NSLog(@"选中的服务器地址：%@",objects);
+ NSLog(@"select server address：%@",objects);
  }];
  
  }
  #endif
  }
 
+ @param serverArray      Given the address of the server list(给定服务器地址列表)
  
- @param serverArray      给定服务器地址列表
- @param selectArrayBlock 返回选中的服务器地址，数组元素的第一个是给定的服务器地址第一组里面被选中的，数组元素第二个为给定服务器地址中第二组里面被选中的，以此类推
+ @param selectArrayBlock Returns the selected server address, the first array element is given the address of the server are to be selected the first set of array elements, the second for a given inside the second group is selected in the address of the server, and so on
+ (返回选中的服务器地址，数组元素的第一个是给定的服务器地址第一组里面被选中的，数组元素第二个为给定服务器地址中第二组里面被选中的，以此类推)
  */
-- (void)initwithServerArray:(NSArray*)serverArray  selectArrayBlock:(SPArrayResultBlock)selectArrayBlock;
+- (void)initWithServerArray:(NSArray*)serverArray  selectArrayBlock:(SPArrayResultBlock)selectArrayBlock;
 
 @end

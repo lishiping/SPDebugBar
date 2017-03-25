@@ -14,6 +14,7 @@
 @property (strong, nonatomic) NSTimer* monitorTimer;
 @property (copy, nonatomic) NSArray *serverArray;
 @property (copy, nonatomic) SPArrayResultBlock selectArrayBlock; //选择的服务地址回调
+@property (assign, nonatomic) NSUInteger isStartWarningNum;
 
 @end
 
@@ -22,13 +23,8 @@
 static SPDebugBar* instance = nil;
 + (id)sharedInstance
 {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        float ScreenWidth = CGRectGetWidth([UIScreen mainScreen].bounds);
-        instance = [[[self class] alloc] initWithFrame:CGRectMake(ScreenWidth-250, 0, 250, 20)];
-        [instance setRootViewController:[SPServerBaseVC new]]; // Xcode7 之后的版本 必须 设置rootViewController
-    });
-    return instance;
+    CGFloat ScreenWidth = CGRectGetWidth([UIScreen mainScreen].bounds);
+    return [[self class] sharedInstanceWithFrame:CGRectMake(ScreenWidth-250, 0, 250, 20)];
 }
 
 + (id)sharedInstanceWithFrame:(CGRect)frame
@@ -46,6 +42,9 @@ static SPDebugBar* instance = nil;
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        
+        _isStartWarningNum =0;
+        
         //UIWindowLevel级别高于状态栏，这样才能显示在状态栏之上
         self.windowLevel = UIWindowLevelStatusBar + 1.0;
         self.backgroundColor = [UIColor clearColor];
@@ -71,11 +70,12 @@ static SPDebugBar* instance = nil;
         
         //获取设备信息
 //        [self refreshDeviceInfo];
+        
     }
     return self;
 }
 
--(void)initwithServerArray:(NSArray *)serverArray selectArrayBlock:(SPArrayResultBlock)selectArrayBlock
+-(void)initWithServerArray:(NSArray *)serverArray selectArrayBlock:(SPArrayResultBlock)selectArrayBlock
 {
     _serverArray = serverArray;
     _selectArrayBlock = selectArrayBlock;
@@ -129,6 +129,15 @@ static SPDebugBar* instance = nil;
 // 实时更新资源使用情况
 - (void)refreshDeviceInfo
 {
+    if (_isStartWarningNum>0&&_isStartWarningNum<5) {
+        _isStartWarningNum++;
+        [self tipLabelAnimation];
+    }else
+    {
+        _isStartWarningNum = 0;
+        self.tipLabel.backgroundColor = [UIColor blackColor];
+    }
+    
     UIDevice* device = [UIDevice currentDevice];
     float cpu = [device cpuUsagePercentage];
     
@@ -156,11 +165,12 @@ static SPDebugBar* instance = nil;
     SPServerListVC* serverListVC = [[SPServerListVC alloc] init];
     serverListVC.tempserverArr =_serverArray;
     
+    //页面选择回调地址
     __weak __typeof(self)weakSelf = self;
     serverListVC.selectServerArrayBlock = ^(NSArray *array){
         __strong __typeof(weakSelf)strongSelf = weakSelf;
         
-        if (strongSelf.selectArrayBlock) {
+        if (strongSelf.selectArrayBlock&&array>0) {
             strongSelf.selectArrayBlock([array copy],nil);
         }
     };
@@ -168,28 +178,31 @@ static SPDebugBar* instance = nil;
     [vc presentViewController:navigationController animated:YES completion:nil];
 }
 
-//收到内存警告，调试条变色
+//收到内存警告，启动动画
 - (void)didReceiveMemoryWarningTip:(NSNotification*)noti
 {
-    [UIView animateWithDuration:0.5
-                          delay:0
-                        options:UIViewAnimationOptionAutoreverse
-                     animations:^{
-                         self.tipLabel.backgroundColor = [UIColor orangeColor];
-                     }
-                     completion:^(BOOL finished) {
-                         if (finished) {
-                             self.tipLabel.backgroundColor = [UIColor blackColor];
-                         }
-                     }];
+    _isStartWarningNum = 1;
+}
+
+//调试条动画
+-(void)tipLabelAnimation
+{
+    [UIView animateWithDuration:0.5f animations:^{
+        self.tipLabel.backgroundColor = [UIColor whiteColor];
+    } completion:^(BOOL finished) {
+        self.tipLabel.backgroundColor = [UIColor redColor];
+    }];
 }
 
 //开始监听设备
 - (void)startMonitorDevice
 {
     self.hidden = NO;
+        
+    _monitorTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(refreshDeviceInfo) userInfo:nil repeats:YES];
+
+    [[NSRunLoop mainRunLoop] addTimer:_monitorTimer forMode:NSDefaultRunLoopMode];
     
-    _monitorTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(refreshDeviceInfo) userInfo:nil repeats:YES];
     [_monitorTimer fire];
 }
 

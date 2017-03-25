@@ -115,7 +115,7 @@
 
 -(void)cleanUserDefault
 {
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:@"你想要清除本地手动输入增加的服务地址吗？清除后地址列表恢复成给定地址列表" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Do you want to remove the local manually enter additional service address?Remove address list after back to the given address list" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
     [alert show];
 }
 
@@ -253,7 +253,7 @@
     
     UILabel *headLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, CGRectGetWidth(tableView.frame), 20)];
     headLabel.textColor = [UIColor yellowColor];
-    headLabel.text =[NSString stringWithFormat:@"第%ld组选中的地址",(long)section+1];
+    headLabel.text =[NSString stringWithFormat:@"The %ld section of the selected address",(long)section+1];
     
     [headView addSubview:headLabel];
     
@@ -333,7 +333,7 @@
     }
     else
     {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:@"服务器地址不能为空，请重新填写" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:@"The address of the server can't be empty, please re-enter" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         [alert show];
     }
 }

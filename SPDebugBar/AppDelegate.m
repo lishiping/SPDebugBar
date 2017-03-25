@@ -57,12 +57,21 @@
 
         NSArray *serverArray = [NSArray arrayWithObjects:serverArr,panServerArr, nil];
         
-        [[SPDebugBar sharedInstanceWithFrame:CGRectMake(CGRectGetWidth([UIScreen mainScreen].bounds)-250, 0, 250, 20)] initwithServerArray:serverArray selectArrayBlock:^(NSArray *objects, NSError *error){
+        [[SPDebugBar sharedInstanceWithFrame:CGRectMake(CGRectGetWidth([UIScreen mainScreen].bounds)-250, 0, 250, 20)] initWithServerArray:serverArray selectArrayBlock:^(NSArray *objects, NSError *error){
             NSLog(@"选中的服务器地址：%@",objects);
             vc.firstStr =[NSString stringWithFormat:@"百度地址:%@",objects[0]] ;
             vc.sceondStr =[NSString stringWithFormat:@"百度盘地址:%@",objects[1]];
             [vc refreshLabel];
         }];
+        
+//        [[SPDebugBar sharedInstance] initWithServerArray:serverArray selectArrayBlock:^(NSArray *objects, NSError *error)
+//        {
+//            NSLog(@"选中的服务器地址：%@",objects);
+//            vc.firstStr =[NSString stringWithFormat:@"百度地址:%@",objects[0]] ;
+//            vc.sceondStr =[NSString stringWithFormat:@"百度盘地址:%@",objects[1]];
+//            [vc refreshLabel];
+//        }];
+
     }
 #endif
 }
