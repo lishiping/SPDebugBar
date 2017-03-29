@@ -26,7 +26,7 @@ typedef void (^SPArrayResultBlock)(NSArray* objects, NSError* error);
 
 
 /**
- A small tool to help developers and testers quickly switch the server address, convenient debug program, can be in debug mode or switching convenient test package on the address of the server
+ Set up the environment,help developers and testers switch server address in the debug mode or the test package,debug the program
  
  1. The functions of this tool: in a given switching between the address of the server, and back to the selected address by block for developers and testers can switch the server address when using the APP widgets.
  
@@ -48,7 +48,7 @@ typedef void (^SPArrayResultBlock)(NSArray* objects, NSError* error);
  
  10.Method of use, such as:
  
- 一个小工具帮助开发人员和测试人员快速切换服务器地址，方便调试程序，可以在debug模式下或者测试包上方便切换服务器地址
+ 设置环境，帮助开发者和测试者在debug模式下或者测试包上切换服务器地址，调试程序
  
  1.本工具的功能作用：在给定的服务器地址间切换，并且通过block返回选中的地址方便开发者和测试人员在使用APP的时候可以切换服务器地址的小工具。
  

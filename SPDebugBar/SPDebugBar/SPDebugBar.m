@@ -67,10 +67,6 @@ static SPDebugBar* instance = nil;
         
         //收到内存警告时调试条背景变色
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveMemoryWarningTip:) name:@"UIApplicationDidReceiveMemoryWarningNotification" object:nil];
-        
-        //获取设备信息
-//        [self refreshDeviceInfo];
-        
     }
     return self;
 }
@@ -201,7 +197,7 @@ static SPDebugBar* instance = nil;
         
     _monitorTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(refreshDeviceInfo) userInfo:nil repeats:YES];
 
-    [[NSRunLoop mainRunLoop] addTimer:_monitorTimer forMode:NSDefaultRunLoopMode];
+    [[NSRunLoop mainRunLoop] addTimer:_monitorTimer forMode:NSRunLoopCommonModes];
     
     [_monitorTimer fire];
 }

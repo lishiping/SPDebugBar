@@ -1,10 +1,7 @@
 
-#pod 'SPDebugBar',                   # 加入SPDebugBar
+#pod 'SPDebugBar'                   
 
-#A tool to help developers and testers quickly switch the server address, convenient to debug the program.一个小工具帮助开发人员和测试人员快速切换服务器地址，方便调试程序，可以在debug模式下或者测试包上方便切换地址
-
-/**
-A small tool to help developers and testers quickly switch the server address, convenient debug program, can be in debug mode or switching convenient test package on the address of the server
+#Set up the environment,help developers and testers switch server address in the debug mode or the test package,debug the program.设置环境，帮助开发者和测试者在debug模式下或者测试包上切换服务器地址，调试程序
 
 1. The functions of this tool: in a given switching between the address of the server, and back to the selected address by block for developers and testers can switch the server address when using the APP widgets.
 
@@ -25,6 +22,8 @@ A small tool to help developers and testers quickly switch the server address, c
 9. This little tool can be given more set in advance the address of the server, a set of three groups of the two groups can, such as convenient and different business interface using multiple service address, if group number has changed, the data reset, all previously entered manually add do not retain, and application has just started to return to take each group first.
 
 10.Method of use, such as:
+
+设置环境，帮助开发者和测试者在debug模式下或者测试包上切换服务器地址，调试程序
 
 1.本工具的功能作用：在给定的服务器地址间切换，并且通过block返回选中的地址方便开发者和测试人员在使用APP的时候可以切换服务器地址的小工具。
 
@@ -76,6 +75,12 @@ NSLog(@"选中的服务器地址：%@",objects);
 }];
 
 }
+
+#else
+
+  set up online server address
+  设置线上地址
+
 #endif
 }
 
@@ -84,5 +89,5 @@ NSLog(@"选中的服务器地址：%@",objects);
 
 @param selectArrayBlock Returns the selected server address, the first array element is given the address of the server are to be selected the first set of array elements, the second for a given inside the second group is selected in the address of the server, and so on
 (返回选中的服务器地址，数组元素的第一个是给定的服务器地址第一组里面被选中的，数组元素第二个为给定服务器地址中第二组里面被选中的，以此类推)
-*/
+
 
