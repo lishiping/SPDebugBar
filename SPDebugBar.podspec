@@ -2,7 +2,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "SPDebugBar"
-  s.version      = "0.0.9"
+  s.version      = "0.0.10"
   s.summary      = "Help developers and testers switch server address in the debug mode or the test package.设置环境，帮助开发者和测试者在debug模式下或者测试包上切换服务器地址"
 
 
@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = "6.0"
 
-  s.source       = { :git => "https://github.com/lishiping/SPDebugBar.git", :tag => "0.0.9" }
+  s.source       = { :git => "https://github.com/lishiping/SPDebugBar.git", :tag => s.version }
 
    s.source_files  = 'SPDebugBar/SPDebugBar/*.{h,m,mm,cpp,c}', 'SPDebugBar/SPDebugBar/*/*.{h,m,mm,cpp,c}'
    s.public_header_files = 'SPDebugBar/SPDebugBar/*.h', 'SPDebugBar/SPDebugBar/*/*.h'
