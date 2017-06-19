@@ -10,9 +10,9 @@
 
 @interface SPDebugBar ()
 
-@property (strong, nonatomic) UILabel* tipLabel;
-@property (strong, nonatomic) NSTimer* monitorTimer;
-@property (copy, nonatomic) NSArray *serverArray;
+@property (strong, nonatomic) UILabel* tipLabel;//显示标签
+@property (strong, nonatomic) NSTimer* monitorTimer;//计时器
+@property (strong, nonatomic) NSArray *serverArray;//预给定服务器列表
 @property (copy, nonatomic) SPArrayResultBlock selectArrayBlock; //选择的服务地址回调
 @property (assign, nonatomic) NSUInteger isStartWarningNum;
 
@@ -21,6 +21,7 @@
 @implementation SPDebugBar
 
 static SPDebugBar* instance = nil;
+
 + (id)sharedInstance
 {
     CGFloat ScreenWidth = CGRectGetWidth([UIScreen mainScreen].bounds);
@@ -88,7 +89,7 @@ static SPDebugBar* instance = nil;
         //服务器地址合法返回本地缓存选择过得地址，没有选择过得地址，默认选择每一组的第一个作为该组的选中地址
         NSArray *selectArr =[SPServerListVC getSelectArrayWithServerArray:_serverArray];
         
-        if (self.selectArrayBlock&&selectArr.count>0) {
+        if (self.selectArrayBlock && selectArr.count>0) {
             self.selectArrayBlock([selectArr copy],nil);
         }
     }
@@ -100,24 +101,20 @@ static SPDebugBar* instance = nil;
 //检查给定服务器地址
 -(BOOL)checkArray:(NSArray*)serverArr
 {
-    BOOL ret = YES;
-    if ([serverArr isKindOfClass:[NSArray class]]&&serverArr.count>0) {
+    BOOL ret = NO;
+    if ([serverArr isKindOfClass:[NSArray class]] && serverArr.count>0) {
         for (NSArray *arr in serverArr) {
-            if ([arr isKindOfClass:[NSArray class]]&&arr.count>0) {
+            if ([arr isKindOfClass:[NSArray class]] && arr.count>0) {
                 for (NSString *serverUrl in arr) {
-                    if (![serverUrl isKindOfClass:[NSString class]]||serverUrl.length==0) {
+                    if ([serverUrl isKindOfClass:[NSString class]] && serverUrl.length>0) {
+                        ret = YES;
+                    }else
+                    {
                         ret = NO;
                     }
                 }
             }
-            else{
-                ret =NO;
-            }
         }
-    }
-    else
-    {
-        ret = NO;
     }
     return ret;
 }
@@ -166,7 +163,7 @@ static SPDebugBar* instance = nil;
     serverListVC.selectServerArrayBlock = ^(NSArray *array){
         __strong __typeof(weakSelf)strongSelf = weakSelf;
         
-        if (strongSelf.selectArrayBlock&&array>0) {
+        if (strongSelf.selectArrayBlock && array>0) {
             strongSelf.selectArrayBlock([array copy],nil);
         }
     };

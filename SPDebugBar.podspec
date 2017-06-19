@@ -2,7 +2,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "SPDebugBar"
-  s.version      = "0.0.10"
+  s.version      = "0.0.11"
   s.summary      = "Help developers and testers switch server address in the debug mode or the test package.设置环境，帮助开发者和测试者在debug模式下或者测试包上切换服务器地址"
 
 
