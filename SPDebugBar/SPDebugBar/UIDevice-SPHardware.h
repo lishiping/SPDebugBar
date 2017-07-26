@@ -113,7 +113,7 @@ typedef enum {
     
 } UIDeviceFamily;
 
-@interface UIDevice (Hardware)
+@interface UIDevice (SPHardware)
 
 - (NSString *) platformString;      //平台信息
 

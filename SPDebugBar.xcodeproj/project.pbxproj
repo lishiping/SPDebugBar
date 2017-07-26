@@ -16,7 +16,7 @@
 		E15C00D81E1D0AAF00E0219B /* SPDebugBar.m in Sources */ = {isa = PBXBuildFile; fileRef = E15C00CF1E1D0AAF00E0219B /* SPDebugBar.m */; };
 		E15C00D91E1D0AAF00E0219B /* SPServerBaseVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E15C00D11E1D0AAF00E0219B /* SPServerBaseVC.m */; };
 		E15C00DB1E1D0AAF00E0219B /* SPServerListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = E15C00D51E1D0AAF00E0219B /* SPServerListVC.m */; };
-		E15C00DC1E1D0AAF00E0219B /* UIDevice-Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = E15C00D71E1D0AAF00E0219B /* UIDevice-Hardware.m */; };
+		E15C00DC1E1D0AAF00E0219B /* UIDevice-SPHardware.m in Sources */ = {isa = PBXBuildFile; fileRef = E15C00D71E1D0AAF00E0219B /* UIDevice-SPHardware.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,8 +36,8 @@
 		E15C00D11E1D0AAF00E0219B /* SPServerBaseVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPServerBaseVC.m; sourceTree = "<group>"; };
 		E15C00D41E1D0AAF00E0219B /* SPServerListVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPServerListVC.h; sourceTree = "<group>"; };
 		E15C00D51E1D0AAF00E0219B /* SPServerListVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPServerListVC.m; sourceTree = "<group>"; };
-		E15C00D61E1D0AAF00E0219B /* UIDevice-Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice-Hardware.h"; sourceTree = "<group>"; };
-		E15C00D71E1D0AAF00E0219B /* UIDevice-Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice-Hardware.m"; sourceTree = "<group>"; };
+		E15C00D61E1D0AAF00E0219B /* UIDevice-SPHardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice-SPHardware.h"; sourceTree = "<group>"; };
+		E15C00D71E1D0AAF00E0219B /* UIDevice-SPHardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice-SPHardware.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,8 +101,8 @@
 				E15C00D11E1D0AAF00E0219B /* SPServerBaseVC.m */,
 				E15C00D41E1D0AAF00E0219B /* SPServerListVC.h */,
 				E15C00D51E1D0AAF00E0219B /* SPServerListVC.m */,
-				E15C00D61E1D0AAF00E0219B /* UIDevice-Hardware.h */,
-				E15C00D71E1D0AAF00E0219B /* UIDevice-Hardware.m */,
+				E15C00D61E1D0AAF00E0219B /* UIDevice-SPHardware.h */,
+				E15C00D71E1D0AAF00E0219B /* UIDevice-SPHardware.m */,
 			);
 			path = SPDebugBar;
 			sourceTree = "<group>";
@@ -185,7 +185,7 @@
 				E15C00B81E1D0A5700E0219B /* main.m in Sources */,
 				E15C00D91E1D0AAF00E0219B /* SPServerBaseVC.m in Sources */,
 				E15C00D81E1D0AAF00E0219B /* SPDebugBar.m in Sources */,
-				E15C00DC1E1D0AAF00E0219B /* UIDevice-Hardware.m in Sources */,
+				E15C00DC1E1D0AAF00E0219B /* UIDevice-SPHardware.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

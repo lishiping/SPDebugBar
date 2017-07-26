@@ -17,21 +17,22 @@
 #import <UIKit/UIKit.h>
 #import "SPServerBaseVC.h"
 
-#define DEBUGSERVERLIST @"SPServerList"
-#define SELECTSERVERLIST @"SPSelectServerList"
+#define SP_GIVENSERVERLIST @"SPGivenServerList"//给定的服务器地址缓存
+#define SP_ALLSERVERLIST @"SPAllServerList"//所有服务器地址缓存
+#define SP_SELECTSERVERLIST @"SPSelectServerList"//选择的服务器地址缓存
 
 typedef void (^NSArrayResultBlock)(NSArray* array);
 
 @interface SPServerListVC : SPServerBaseVC
 
-@property(nonatomic,copy)NSArrayResultBlock selectServerArrayBlock;
-@property (copy, nonatomic) NSArray *tempserverArr;//给定的服务器地址数组
+@property(nonatomic,copy)NSArrayResultBlock selectServerArrayBlock;//选择地址后回调
+@property (strong, nonatomic) NSArray *tempserverArr;//给定的服务器地址数组
 
 /**
  获得已经选中的服务地址，如果第一次启动，没有选择过，则返回每组的第一个，如果有本地缓存，则返回本地缓存服务地址
-
+ 如果给定地址有变化，则重置地址，并取每组第一个
  @param serverArr 给定的服务地址列表
-
+ 
  @return 返回选择的
  */
 +(NSArray *)getSelectArrayWithServerArray:(NSArray*)serverArr;

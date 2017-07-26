@@ -6,7 +6,7 @@
 //
 
 #import "SPDebugBar.h"
-#import "UIDevice-Hardware.h"
+#import "UIDevice-SPHardware.h"
 
 @interface SPDebugBar ()
 
@@ -20,6 +20,7 @@
 
 @implementation SPDebugBar
 
+#pragma mark - shareInstance
 static SPDebugBar* instance = nil;
 
 + (id)sharedInstance
@@ -38,54 +39,52 @@ static SPDebugBar* instance = nil;
     return instance;
 }
 
-- (id)initWithFrame:(CGRect)frame
+#pragma mark - init
+- (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        
-        _isStartWarningNum =0;
-        
-        //UIWindowLevel级别高于状态栏，这样才能显示在状态栏之上
-        self.windowLevel = UIWindowLevelStatusBar + 1.0;
-        self.backgroundColor = [UIColor clearColor];
-        
-        //文字提示label,显示cpu和内存使用情况
-        _tipLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
-        _tipLabel.backgroundColor = [UIColor blackColor];
-        _tipLabel.textColor = [UIColor greenColor];
-        _tipLabel.textAlignment = NSTextAlignmentCenter;
-        _tipLabel.font = [UIFont systemFontOfSize:10];
-        [self addSubview:_tipLabel];
-        
-        //添加长按手势弹出配置界面
-        UILongPressGestureRecognizer* longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(presentConfigPageVC)];
-        [self addGestureRecognizer:longPressGesture];
-        
-        //添加单击手势隐藏和显示页面
-        UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showOrHiddenDebugStatusBar)];
-        [self addGestureRecognizer:tapGesture];
-        
-        //收到内存警告时调试条背景变色
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveMemoryWarningTip:) name:@"UIApplicationDidReceiveMemoryWarningNotification" object:nil];
+        [self initialize];
     }
     return self;
 }
 
+-(void)initialize
+{
+    _isStartWarningNum =0;
+    
+    //UIWindowLevel级别高于状态栏，这样才能显示在状态栏之上
+    self.windowLevel = UIWindowLevelStatusBar + 1.0;
+    self.backgroundColor = [UIColor clearColor];
+    
+    //文字提示label,显示cpu和内存使用情况
+    _tipLabel = [[UILabel alloc] initWithFrame:self.bounds];
+    _tipLabel.backgroundColor = [UIColor blackColor];
+    _tipLabel.textColor = [UIColor greenColor];
+    _tipLabel.textAlignment = NSTextAlignmentCenter;
+    _tipLabel.font = [UIFont systemFontOfSize:10];
+    [self addSubview:_tipLabel];
+    
+    //添加长按手势弹出配置界面
+    UILongPressGestureRecognizer* longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(presentConfigPageVC)];
+    [self addGestureRecognizer:longPressGesture];
+    
+    //添加单击手势隐藏和显示页面
+    UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showOrHiddenDebugStatusBar)];
+    [self addGestureRecognizer:tapGesture];
+    
+    //收到内存警告时调试条背景变色
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveMemoryWarningTip:) name:@"UIApplicationDidReceiveMemoryWarningNotification" object:nil];
+}
+
 -(void)initWithServerArray:(NSArray *)serverArray selectArrayBlock:(SPArrayResultBlock)selectArrayBlock
 {
-    _serverArray = serverArray;
-    _selectArrayBlock = selectArrayBlock;
+    self.serverArray = serverArray;
+    self.selectArrayBlock = selectArrayBlock;
     
-    //检查服务器地址数组是否合法，如果不合法返回错误
-    if (![self checkArray:serverArray]) {
-        if (self.selectArrayBlock) {
-            self.selectArrayBlock(nil,[NSError errorWithDomain:@"data is illegal" code:-2 userInfo:nil]);
-            self.selectArrayBlock = nil;
-        }
-    }
-    else
-    {
+    //检查服务器地址数组是否合法
+    if ([self checkArray:serverArray]) {
         //服务器地址合法返回本地缓存选择过得地址，没有选择过得地址，默认选择每一组的第一个作为该组的选中地址
         NSArray *selectArr =[SPServerListVC getSelectArrayWithServerArray:_serverArray];
         
@@ -93,32 +92,47 @@ static SPDebugBar* instance = nil;
             self.selectArrayBlock([selectArr copy],nil);
         }
     }
+    else
+    {
+        //如果地址不合法，返回错误信息
+        if (self.selectArrayBlock) {
+            self.selectArrayBlock(nil,[NSError errorWithDomain:@"url is illegal" code:-2 userInfo:nil]);
+            self.selectArrayBlock = nil;
+        }
+    }
     
     //开始监听设备，获取活动消息
     [self startMonitorDevice];
 }
 
-//检查给定服务器地址
+#pragma mark - check
+//检查给定服务器地址是否合法,只检查了字符串，没检查url地址的正则表达式
 -(BOOL)checkArray:(NSArray*)serverArr
 {
-    BOOL ret = NO;
+    BOOL ret = YES;
     if ([serverArr isKindOfClass:[NSArray class]] && serverArr.count>0) {
         for (NSArray *arr in serverArr) {
             if ([arr isKindOfClass:[NSArray class]] && arr.count>0) {
                 for (NSString *serverUrl in arr) {
-                    if ([serverUrl isKindOfClass:[NSString class]] && serverUrl.length>0) {
-                        ret = YES;
-                    }else
-                    {
+                    if (![serverUrl isKindOfClass:[NSString class]] || serverUrl.length<1) {
                         ret = NO;
                     }
                 }
             }
+            else
+            {
+                ret = NO;
+            }
         }
+    }
+    else
+    {
+        ret = NO;
     }
     return ret;
 }
 
+#pragma mark - events
 // 实时更新资源使用情况
 - (void)refreshDeviceInfo
 {
@@ -156,14 +170,14 @@ static SPDebugBar* instance = nil;
     
     //弹出配置页面
     SPServerListVC* serverListVC = [[SPServerListVC alloc] init];
-    serverListVC.tempserverArr =_serverArray;
+    serverListVC.tempserverArr =self.serverArray;
     
     //页面选择回调地址
-    __weak __typeof(self)weakSelf = self;
+    __weak __typeof(self) weakSelf = self;
     serverListVC.selectServerArrayBlock = ^(NSArray *array){
-        __strong __typeof(weakSelf)strongSelf = weakSelf;
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
         
-        if (strongSelf.selectArrayBlock && array>0) {
+        if (strongSelf.selectArrayBlock && array.count>0) {
             strongSelf.selectArrayBlock([array copy],nil);
         }
     };
@@ -191,9 +205,9 @@ static SPDebugBar* instance = nil;
 - (void)startMonitorDevice
 {
     self.hidden = NO;
-        
+    
     _monitorTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(refreshDeviceInfo) userInfo:nil repeats:YES];
-
+    
     [[NSRunLoop mainRunLoop] addTimer:_monitorTimer forMode:NSRunLoopCommonModes];
     
     [_monitorTimer fire];

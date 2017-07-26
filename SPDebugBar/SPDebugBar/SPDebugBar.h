@@ -65,7 +65,7 @@ typedef void (^SPArrayResultBlock)(NSArray* objects, NSError* error);
  
  2.应用开始启动的时候，检查服务器地址是否正确，如果不正确，返回错误。
  
- 3.应用开始启动，返回之前本地保存的之前选中的地址（第一次默认选择每组的第一个）
+ 3.应用开始启动，返回本地保存的之前选中的地址（第一次默认选择每组的第一个）,如果给定地址有变化，则全部重置，并返回每组第一个
  
  4.应用启动之后可以长按调试条弹出地址列表进行选择切换。
  
@@ -74,18 +74,18 @@ typedef void (^SPArrayResultBlock)(NSArray* objects, NSError* error);
  6.单击调试条隐藏和显示调试条文字（调试条信息是CPU和内存使用情况）
  
  7.当收到内存警告的时候调试条会变色。
-
+ 
  8.如果添加的地址太多了，可以清除手动输入增加的地址，恢复成给定的地址列表。
-
+ 
  9.本小工具可以预先给定多组服务器地址，一组两组三组等都可以，方便不同业务接口使用多个服务地址，如果组数有变动，则数据全部重置，之前手动输入添加的不保留，而且应用刚启动时返回的取每组第一个。
  
  
  10.使用方法，例如：
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+ - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
  {
  
-   [self configServerUrl];
-
+ [self configServerUrl];
+ 
  }
  
  //服务器地址配置方法
@@ -112,13 +112,18 @@ typedef void (^SPArrayResultBlock)(NSArray* objects, NSError* error);
  }];
  
  }
+ else
+ 
+ //set up online server address
+ //设置线上正式服地址
+ 
  #endif
  }
-
+ 
  @param serverArray      Given the address of the server list(给定服务器地址列表)
  
  @param selectArrayBlock Returns the selected server address, the first array element is given the address of the server are to be selected the first set of array elements, the second for a given inside the second group is selected in the address of the server, and so on
- (返回选中的服务器地址，数组元素的第一个是给定的服务器地址第一组里面被选中的，数组元素第二个为给定服务器地址中第二组里面被选中的，以此类推)
+ (返回选中的服务器地址，数组元素的第一个是给定的服务器地址第一组里面被选中的，数组元素第二个为给定服务器地址中第二组里面被选中的，以此类推)，error返回错误原因，给定地址有错误
  */
 - (void)initWithServerArray:(NSArray*)serverArray  selectArrayBlock:(SPArrayResultBlock)selectArrayBlock;
 

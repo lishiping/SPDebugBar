@@ -18,9 +18,9 @@
 #import <mach/processor_info.h>
 #include <sys/stat.h>
 
-#import "UIDevice-Hardware.h"
+#import "UIDevice-SPHardware.h"
 
-@implementation UIDevice (Hardware)
+@implementation UIDevice (SPHardware)
 /*
  Platforms
  

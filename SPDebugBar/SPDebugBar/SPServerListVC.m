@@ -31,9 +31,9 @@
     
     [self addButtonItem];
     
-    [self selectMArr];
-    
     [self serverMArr];
+    
+    [self selectMArr];
     
     
 }
@@ -58,14 +58,16 @@
 {
     NSMutableArray *selectMArr = [NSMutableArray arrayWithCapacity:0];
     
-    NSArray *oldSelectArr = [[NSUserDefaults standardUserDefaults] objectForKey:SELECTSERVERLIST];
-    //如果有缓存,先取缓存内的,同时缓存内的个数要与给定的组数相同，如果不相同，说明给定的组数变了，要全部重置
-    if (oldSelectArr.count>0&&oldSelectArr.count==serverArr.count) {
-        selectMArr = [NSMutableArray arrayWithArray:oldSelectArr];
-        return selectMArr;
+    NSArray *oldServerArr = [[NSUserDefaults standardUserDefaults] objectForKey:SP_GIVENSERVERLIST];
+    NSArray *oldSelectArr = [[NSUserDefaults standardUserDefaults] objectForKey:SP_SELECTSERVERLIST];
+    
+    //如果有缓存选择的地址,同时验证缓存内给定地址列表是否与新的给定地址列表相同,如果相同则本次取缓存选择的地址，如果不相同，说明给定地址变了，要全部重置
+    if (oldSelectArr.count>0 && [oldServerArr isEqualToArray:serverArr]) {
+        //返回缓存选择的地址
+        return oldSelectArr;
     }
     
-    //如果没有就从给定地址取出每组的第一个
+    //如果没有缓存或者给定地址有变化，就从给定地址取出每组的第一个
     NSArray *array = [serverArr copy];
     
     for (int i= 0; i<array.count; i++) {
@@ -84,8 +86,10 @@
     
     //写入本地缓存
     if (selectMArr.count>0) {
-        [[NSUserDefaults standardUserDefaults]  setObject:[selectMArr copy] forKey:SELECTSERVERLIST];
-        [[NSUserDefaults standardUserDefaults]  setObject:[serverArr copy] forKey:DEBUGSERVERLIST];
+        [[NSUserDefaults standardUserDefaults]  setObject:[selectMArr copy] forKey:SP_SELECTSERVERLIST];
+        [[NSUserDefaults standardUserDefaults]  setObject:[serverArr copy] forKey:SP_GIVENSERVERLIST];
+        [[NSUserDefaults standardUserDefaults]  setObject:[serverArr copy] forKey:SP_ALLSERVERLIST];
+        
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
@@ -96,16 +100,27 @@
 -(void)addButtonItem
 {
     //取消按钮
-   UIBarButtonItem *cancelItem  = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(dismiss)];
+    UIBarButtonItem *cancelItem  = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(dismiss)];
     
     //清除按钮
-   UIBarButtonItem *cleanItem  = [[UIBarButtonItem alloc] initWithTitle:@"Clean" style:UIBarButtonItemStylePlain target:self action:@selector(cleanUserDefault)];
+    UIBarButtonItem *cleanItem  = [[UIBarButtonItem alloc] initWithTitle:@"Clean" style:UIBarButtonItemStylePlain target:self action:@selector(cleanUserDefault)];
     
-    [self.navigationItem setLeftBarButtonItems:@[cancelItem,cleanItem]];
+    
+    NSArray *oldGivenArr = [[NSUserDefaults standardUserDefaults] objectForKey:SP_GIVENSERVERLIST];
+    NSArray *oldAllArr = [[NSUserDefaults standardUserDefaults] objectForKey:SP_ALLSERVERLIST];
+    
+    //如果给定服务器地址和所有地址相同，说明没有后添加过，不需要清除
+    if ([oldGivenArr isEqualToArray:oldAllArr]) {
+        [self.navigationItem setLeftBarButtonItems:@[cancelItem]];
+    }
+    else
+    {
+        [self.navigationItem setLeftBarButtonItems:@[cancelItem,cleanItem]];
+    }
     
     //确定按钮
     [self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"OK" style:UIBarButtonItemStylePlain target:self action:@selector(confirm)] animated:YES];
-
+    
 }
 
 - (void)dismiss
@@ -124,7 +139,7 @@
     [self.view endEditing:YES];
     if (self.selectMArr.count>0) {
         
-        [[NSUserDefaults standardUserDefaults]  setObject:[self.selectMArr copy] forKey:SELECTSERVERLIST];
+        [[NSUserDefaults standardUserDefaults]  setObject:[self.selectMArr copy] forKey:SP_SELECTSERVERLIST];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
@@ -139,10 +154,10 @@
 -(BOOL)serverArrIsExistUrl:(NSString*)tempUrl atIndex:(NSUInteger)index
 {
     BOOL ret =NO;
-    NSMutableArray *oldtemp = self.serverMArr[index];
+    NSArray *oldtemp = self.serverMArr[index];
     for (NSString *string in oldtemp) {
         if ([string isEqualToString:tempUrl]) {
-            ret = YES;;
+            ret = YES;
         }
     }
     return ret;
@@ -153,12 +168,12 @@
 {
     if (!_serverMArr) {
         //先从缓存读取，没有缓存，取给定的
-        NSArray *temp = [[NSUserDefaults standardUserDefaults] objectForKey:DEBUGSERVERLIST];
+        NSArray *temp = [[NSUserDefaults standardUserDefaults] objectForKey:SP_ALLSERVERLIST];
         _serverMArr = [NSMutableArray arrayWithArray:temp];
         if (_serverMArr.count==0) {
             _serverMArr = [NSMutableArray arrayWithArray:_tempserverArr];
             if (_serverMArr.count>0) {
-                [[NSUserDefaults standardUserDefaults] setObject:[_tempserverArr copy] forKey:DEBUGSERVERLIST];
+                [[NSUserDefaults standardUserDefaults] setObject:[_tempserverArr copy] forKey:SP_ALLSERVERLIST];
                 [[NSUserDefaults standardUserDefaults] synchronize];
             }
         }
@@ -207,7 +222,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identify];
     }
     cell.textLabel.text = [[self.serverMArr objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-
+    
     return cell;
 }
 
@@ -215,20 +230,23 @@
 {
     [self.view endEditing:YES];
     
-    UITextField *text = [tableView viewWithTag:(indexPath.section +200)];
+    UITextField *textField = [tableView viewWithTag:(indexPath.section +200)];
     //有时候该方法找不到text，所以在tableview的subviews里面找
-    if (!text) {
+    if (!textField) {
         for (UIView *subview in tableView.subviews) {
-            text =[subview viewWithTag:(indexPath.section +200)];
-            if (text&&[text isKindOfClass:[UITextField class]]) {
+            textField =[subview viewWithTag:(indexPath.section +200)];
+            if (textField&&[textField isKindOfClass:[UITextField class]]) {
                 break;
             }
         }
     }
     
-    if (text.text.length>0) {
-        text.text  =[[self.serverMArr objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-        [self.selectMArr replaceObjectAtIndex:indexPath.section withObject:text.text];
+    if (textField.text.length>0) {
+        NSString *text =[[self.serverMArr objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+        if (text.length>0) {
+            textField.text = text;
+            [self.selectMArr replaceObjectAtIndex:indexPath.section withObject:textField.text];
+        }
     }
 }
 
@@ -239,10 +257,9 @@
         [ary removeObjectAtIndex:indexPath.row];
         [self.serverMArr replaceObjectAtIndex:indexPath.section withObject:ary];
         
-        [[NSUserDefaults standardUserDefaults] setObject:self.serverMArr forKey:DEBUGSERVERLIST];
+        [[NSUserDefaults standardUserDefaults] setObject:self.serverMArr forKey:SP_ALLSERVERLIST];
         [[NSUserDefaults standardUserDefaults] synchronize];
         [self.tableView reloadData];
-       
     }
 }
 
@@ -299,8 +316,6 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-//    NSLog(@"第几个%ld",(long)textField.tag);
-    
     //获取组索引
     NSUInteger section =textField.tag -200;
     
@@ -320,16 +335,17 @@
             self.serverMArr = oldServerArr;
             
             //服务器地址重新写入
-            [[NSUserDefaults standardUserDefaults] setObject:oldServerArr forKey:DEBUGSERVERLIST];
+            [[NSUserDefaults standardUserDefaults] setObject:oldServerArr forKey:SP_ALLSERVERLIST];
         }
         
         //旧地址替换成新地址
         [self.selectMArr replaceObjectAtIndex:section withObject:textField.text];
-        [[NSUserDefaults standardUserDefaults] setObject:self.selectMArr forKey:SELECTSERVERLIST];
+        [[NSUserDefaults standardUserDefaults] setObject:self.selectMArr forKey:SP_SELECTSERVERLIST];
         [[NSUserDefaults standardUserDefaults] synchronize];
         
         [self.tableView reloadData];
-
+        
+        [self addButtonItem];
     }
     else
     {
@@ -341,13 +357,16 @@
 #pragma mark - alertview delegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    //确认清除后添加的
     if (buttonIndex==1) {
         
         //服务器地址重新写入
-        [[NSUserDefaults standardUserDefaults] setObject:[self.tempserverArr copy] forKey:DEBUGSERVERLIST];
+        [[NSUserDefaults standardUserDefaults] setObject:[self.tempserverArr copy] forKey:SP_ALLSERVERLIST];
         [[NSUserDefaults standardUserDefaults] synchronize];
         self.serverMArr = [NSMutableArray arrayWithArray:self.tempserverArr];
         [self.tableView reloadData];
+        
+        [self addButtonItem];
     }
 }
 
