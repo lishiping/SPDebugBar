@@ -13,7 +13,7 @@
 //github address//https://github.com/lishiping/SPMacro
 //github address//https://github.com/lishiping/SafeData
 //github address//https://github.com/lishiping/SPCategory
-
+//github address//https://github.com/lishiping/SPBaseClass
 
 #import <UIKit/UIKit.h>
 #import "SPServerListVC.h"
@@ -49,7 +49,7 @@ typedef void (^SPArrayResultBlock)(NSArray* objects, NSError* error);
  
  5. After the popup list, also can click on the selected green one server address, actual it is UItextfield that can input, online press enter, you can manually add a new server address, at the same time, the current input the list to join this group.
  
- 6. Click the debug debugging to hide and display text (debug message is CPU and memory usage.)
+ 6. Click the debug debugging to hide and display text (debug message is CPU and memory,FPS usage.)
  
  7. When received memory warning debug will change color.
  
@@ -71,7 +71,7 @@ typedef void (^SPArrayResultBlock)(NSArray* objects, NSError* error);
  
  5.弹出列表之后，也可以点击绿色被选中的那条服务器地址，实际是UItextfield可以在线输入，回车，就可以手动加入一条新的服务器地址，同时把当前输入的这条加入到该组的列表中。
  
- 6.单击调试条隐藏和显示调试条文字（调试条信息是CPU和内存使用情况）
+ 6.单击调试条隐藏和显示调试条信息（调试条信息是CPU，内存，FPS的使用情况）
  
  7.当收到内存警告的时候调试条会变色。
  

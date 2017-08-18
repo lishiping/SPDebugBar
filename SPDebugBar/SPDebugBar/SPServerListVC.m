@@ -50,6 +50,18 @@
     authorLabel.textAlignment = NSTextAlignmentCenter;
     [tableFooterView addSubview:authorLabel];
     
+    //version
+    NSString *applicationVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString *applicationBuild = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+    NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
+    
+    UILabel *versionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 220, CGRectGetWidth(_tableView.frame), 30)];
+    versionLabel.textColor = [UIColor darkGrayColor];
+    versionLabel.text = [NSString stringWithFormat:@"APP v%@  Build(%@)  iOS(%@)",applicationVersion,applicationBuild,systemVersion];
+    [versionLabel setFont:[UIFont systemFontOfSize:12]];
+    versionLabel.textAlignment = NSTextAlignmentCenter;
+    [tableFooterView addSubview:versionLabel];
+    
     self.tableView.tableFooterView = tableFooterView;
     
 }

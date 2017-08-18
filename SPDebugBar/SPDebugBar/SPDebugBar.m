@@ -11,10 +11,17 @@
 @interface SPDebugBar ()
 
 @property (strong, nonatomic) UILabel* tipLabel;//显示标签
-@property (strong, nonatomic) NSTimer* monitorTimer;//计时器
+//@property (strong, nonatomic) NSTimer* monitorTimer;//计时器
 @property (strong, nonatomic) NSArray *serverArray;//预给定服务器列表
 @property (copy, nonatomic) SPArrayResultBlock selectArrayBlock; //选择的服务地址回调
 @property (assign, nonatomic) NSUInteger isStartWarningNum;
+
+/****0.2.0加入刷新fps使用的****/
+@property (nonatomic, strong) CADisplayLink *displayLink;//更精确的计时器
+@property (nonatomic) int screenUpdatesCount;
+@property (nonatomic) CFTimeInterval screenUpdatesBeginTime;
+@property (nonatomic) CFTimeInterval averageScreenUpdatesTime;
+@property  NSUInteger fps;
 
 @end
 
@@ -76,6 +83,10 @@ static SPDebugBar* instance = nil;
     
     //收到内存警告时调试条背景变色
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveMemoryWarningTip:) name:@"UIApplicationDidReceiveMemoryWarningNotification" object:nil];
+    
+    self.screenUpdatesCount = 0;
+    self.screenUpdatesBeginTime = 0.0f;
+    self.averageScreenUpdatesTime = 0.017f;
 }
 
 -(void)initWithServerArray:(NSArray *)serverArray selectArrayBlock:(SPArrayResultBlock)selectArrayBlock
@@ -155,7 +166,10 @@ static SPDebugBar* instance = nil;
     //Memory
     NSString* memoryInfo = [NSString stringWithFormat:@"Memory:%.1fM/%.1fM", (double)[device usedMemoryBytes],(double)[device totalMemoryBytes] / 1024.0 / 1024.0];
     
-    _tipLabel.text = [NSString stringWithFormat:@"%@  %@", cpuInfo, memoryInfo];
+    //FPS
+    NSString* fpsInfo = [NSString stringWithFormat:@"FPS:%lu", (unsigned long)self.fps];
+    
+    _tipLabel.text = [NSString stringWithFormat:@"%@ %@ %@", cpuInfo, memoryInfo,fpsInfo];
 }
 
 //弹出配置页面
@@ -205,12 +219,15 @@ static SPDebugBar* instance = nil;
 - (void)startMonitorDevice
 {
     self.hidden = NO;
+    //
+    //    _monitorTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(refreshDeviceInfo) userInfo:nil repeats:YES];
+    //
+    //    [[NSRunLoop mainRunLoop] addTimer:_monitorTimer forMode:NSRunLoopCommonModes];
+    //
+    //    [_monitorTimer fire];
     
-    _monitorTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(refreshDeviceInfo) userInfo:nil repeats:YES];
-    
-    [[NSRunLoop mainRunLoop] addTimer:_monitorTimer forMode:NSRunLoopCommonModes];
-    
-    [_monitorTimer fire];
+    //开始使用timer刷新，但是我想加入刷新fps功能，所以就得改成使用displayLink刷新
+    [self setupDisplayLink];
 }
 
 //显示或隐藏Bar
@@ -224,5 +241,45 @@ static SPDebugBar* instance = nil;
         self.tipLabel.hidden = YES;
     }
 }
+
+- (void)setupDisplayLink
+{
+    self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkAction:)];
+    [self.displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+}
+
+- (void)displayLinkAction:(CADisplayLink *)displayLink
+{
+    if (self.screenUpdatesBeginTime == 0.0f) {
+        self.screenUpdatesBeginTime = displayLink.timestamp;
+    } else {
+        self.screenUpdatesCount += 1;
+        
+        CFTimeInterval screenUpdatesTime = self.displayLink.timestamp - self.screenUpdatesBeginTime;
+        
+        if (screenUpdatesTime >= 1.0)
+        {
+            CFTimeInterval updatesOverSecond = screenUpdatesTime - 1.0f;
+            int framesOverSecond = updatesOverSecond / self.averageScreenUpdatesTime;
+            
+            self.screenUpdatesCount -= framesOverSecond;
+            if (self.screenUpdatesCount < 0) {
+                self.screenUpdatesCount = 0;
+            }
+            
+            [self updateFPS];
+        }
+    }
+}
+
+- (void)updateFPS
+{
+    self.fps = self.screenUpdatesCount;
+    self.screenUpdatesCount = 0;
+    self.screenUpdatesBeginTime = 0.0f;
+    
+    [self refreshDeviceInfo];
+}
+
 
 @end
