@@ -15,26 +15,6 @@
 //github address//https://github.com/lishiping/SPCategory
 //github address//https://github.com/lishiping/SPBaseClass
 
-#import <UIKit/UIKit.h>
-#import "SPServerListVC.h"
-
-typedef void (^SPArrayResultBlock)(NSArray* objects, NSError* error);
-
-@interface SPDebugBar : UIWindow
-
-/**
- Singleton, debugbar of default on the top right corner
- Singleton单例，调试条默认放在右上角
- */
-+ (id)sharedInstance;
-
-
-/**
- Singleton, the method can custom debugbar of the position
- singleton单例，该方法可以自定义调试条的位置
- */
-+ (id)sharedInstanceWithFrame:(CGRect)frame;
-
 
 /**
  Set up the environment,help developers and testers switch server address in the debug mode or the test package,debug the program
@@ -107,12 +87,14 @@ typedef void (^SPArrayResultBlock)(NSArray* objects, NSError* error);
  
  NSArray *serverArray = [NSArray arrayWithObjects:serverArr,panServerArr, nil];
  
- [[SPDebugBar sharedInstance] initwithServerArray:serverArray selectArrayBlock:^(NSArray *objects, NSError *error){
+ [SPDebugBar sharedInstanceWithServerArray:serverArray SelectArrayBlock:^(NSArray *objects, NSError *error)
+ {
  NSLog(@"select server address：%@",objects);
  }];
  
  }
  else
+ NSLog(@"select server address：%@",objects);
  
  //set up online server address
  //设置线上正式服地址
@@ -120,11 +102,28 @@ typedef void (^SPArrayResultBlock)(NSArray* objects, NSError* error);
  #endif
  }
  
+ */
+
+#import <UIKit/UIKit.h>
+#import "SPServerListVC.h"
+
+typedef void (^SPArrayResultBlock)(NSArray* objects, NSError* error);
+
+@interface SPDebugBar : UIWindow
+
+/**
+ Singleton, debugbar of default on the top right corner
+ Singleton单例，调试条默认放在右上角
  @param serverArray      Given the address of the server list(给定服务器地址列表)
- 
  @param selectArrayBlock Returns the selected server address, the first array element is given the address of the server are to be selected the first set of array elements, the second for a given inside the second group is selected in the address of the server, and so on
  (返回选中的服务器地址，数组元素的第一个是给定的服务器地址第一组里面被选中的，数组元素第二个为给定服务器地址中第二组里面被选中的，以此类推)，error返回错误原因，给定地址有错误
  */
-- (void)initWithServerArray:(NSArray*)serverArray  selectArrayBlock:(SPArrayResultBlock)selectArrayBlock;
++ (id)sharedInstanceWithServerArray:(NSArray*)serverArray  SelectArrayBlock:(SPArrayResultBlock)selectArrayBlock;
+
+/**
+ Singleton, the method can custom debugbar of the position
+ singleton单例，该方法可以自定义调试条的位置
+ */
++ (id)sharedInstanceWithFrame:(CGRect)frame ServerArray:(NSArray*)serverArray  SelectArrayBlock:(SPArrayResultBlock)selectArrayBlock;
 
 @end

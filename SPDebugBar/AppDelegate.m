@@ -58,7 +58,7 @@
         
         NSArray *serverArray = [NSArray arrayWithObjects:serverArr,panServerArr, nil];
         
-        [[SPDebugBar sharedInstance] initWithServerArray:serverArray selectArrayBlock:^(NSArray *objects, NSError *error)
+        [SPDebugBar sharedInstanceWithServerArray:serverArray SelectArrayBlock:^(NSArray *objects, NSError *error)
          {
              NSLog(@"选中的服务器地址：%@",objects);
              vc.firstStr =[NSString stringWithFormat:@"百度地址:%@",objects[0]] ;

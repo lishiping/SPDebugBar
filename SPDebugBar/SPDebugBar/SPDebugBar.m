@@ -30,18 +30,19 @@
 #pragma mark - shareInstance
 static SPDebugBar* instance = nil;
 
-+ (id)sharedInstance
++ (id)sharedInstanceWithServerArray:(NSArray *)serverArray SelectArrayBlock:(SPArrayResultBlock)selectArrayBlock
 {
     CGFloat ScreenWidth = CGRectGetWidth([UIScreen mainScreen].bounds);
-    return [[self class] sharedInstanceWithFrame:CGRectMake(ScreenWidth-250, 0, 250, 20)];
+    return [[self class] sharedInstanceWithFrame:CGRectMake(ScreenWidth-250, 0, 250, 20) ServerArray:serverArray SelectArrayBlock:selectArrayBlock];
 }
 
-+ (id)sharedInstanceWithFrame:(CGRect)frame
++ (id)sharedInstanceWithFrame:(CGRect)frame ServerArray:(NSArray *)serverArray SelectArrayBlock:(SPArrayResultBlock)selectArrayBlock
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         instance = [[[self class] alloc] initWithFrame:frame];
         [instance setRootViewController:[SPServerBaseVC new]]; // Xcode7 之后的版本 必须 设置rootViewController
+        [instance configServerArray:serverArray selectArrayBlock:selectArrayBlock];
     });
     return instance;
 }
@@ -89,7 +90,7 @@ static SPDebugBar* instance = nil;
     self.averageScreenUpdatesTime = 0.017f;
 }
 
--(void)initWithServerArray:(NSArray *)serverArray selectArrayBlock:(SPArrayResultBlock)selectArrayBlock
+-(void)configServerArray:(NSArray *)serverArray selectArrayBlock:(SPArrayResultBlock)selectArrayBlock
 {
     self.serverArray = serverArray;
     self.selectArrayBlock = selectArrayBlock;
