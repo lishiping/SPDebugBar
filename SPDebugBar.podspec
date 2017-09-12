@@ -2,7 +2,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "SPDebugBar"
-  s.version      = "0.3.0"
+  s.version      = "0.4.0"
   s.summary      = "Help switch server address in the debug,test package,And show CPU,Memory,FPS.设置环境,在debug或测试包上切换服务器地址,显示CPU,Memory,FPS"
 
 

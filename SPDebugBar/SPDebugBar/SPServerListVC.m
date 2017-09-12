@@ -210,6 +210,8 @@
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.separatorInset = UIEdgeInsetsZero;
+        [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:
+         NSStringFromClass([UITableViewCell class])];
     }
     return _tableView;
 }
@@ -228,13 +230,13 @@
 
 - (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath
 {
-    static NSString* identify = @"ServerListCell";
-    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identify];
+    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([UITableViewCell class])];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identify];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:NSStringFromClass([UITableViewCell class])];
     }
     cell.textLabel.text = [[self.serverMArr objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-    
+    cell.textLabel.adjustsFontSizeToFitWidth = YES;
+
     return cell;
 }
 
