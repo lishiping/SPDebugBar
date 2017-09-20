@@ -41,7 +41,7 @@
 #pragma mark - copyright info
 -(void)configCopyRightInfo
 {
-    UIView *tableFooterView =[[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(_tableView.frame), 300)];
+    UIView *tableFooterView =[[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(_tableView.frame), 400)];
     
     UILabel *authorLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 250, CGRectGetWidth(_tableView.frame), 30)];
     authorLabel.textColor = [UIColor darkGrayColor];
@@ -296,6 +296,7 @@
     headTextField.placeholder = @"Input URL!!";
     headTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
     headTextField.text = [self.selectMArr objectAtIndex:section];
+    headTextField.adjustsFontSizeToFitWidth = YES;
     headTextField.delegate = self;
     [headView addSubview:headTextField];
     

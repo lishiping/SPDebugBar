@@ -1,7 +1,7 @@
 
 #pod 'SPDebugBar'                   
 
-#Set up the environment,help developers and testers switch server address in the debug mode or the test package,debug the program.设置环境，帮助开发者和测试者在debug模式下或者测试包上切换服务器地址，调试程序
+#Set up the environment,help developers and testers switch server address in the debug mode or the test package,debug the program.设置环境，帮助开发者和测试者在debug模式下或者测试包上切换服务器地址，调试程序,显示CPU,Memory,FPS
 
 1. The functions of this tool: in a given switching between the address of the server, and back to the selected address by block for developers and testers can switch the server address when using the APP widgets.
 
@@ -70,7 +70,8 @@ NSArray *panServerArr = @[
 
 NSArray *serverArray = [NSArray arrayWithObjects:serverArr,panServerArr, nil];
 
-[[SPDebugBar sharedInstance] initwithServerArray:serverArray selectArrayBlock:^(NSArray *objects, NSError *error){
+ [SPDebugBar sharedInstanceWithServerArray:serverArray SelectArrayBlock:^(NSArray *objects, NSError *error)
+{
 NSLog(@"选中的服务器地址：%@",objects);
 }];
 
@@ -84,10 +85,5 @@ NSLog(@"选中的服务器地址：%@",objects);
 #endif
 }
 
-
-@param serverArray      Given the address of the server list(给定服务器地址列表)
-
-@param selectArrayBlock Returns the selected server address, the first array element is given the address of the server are to be selected the first set of array elements, the second for a given inside the second group is selected in the address of the server, and so on
-(返回选中的服务器地址，数组元素的第一个是给定的服务器地址第一组里面被选中的，数组元素第二个为给定服务器地址中第二组里面被选中的，以此类推)
 
 
