@@ -138,7 +138,7 @@
 				TargetAttributes = {
 					E15C00B21E1D0A5700E0219B = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = 59R6D7WJ6M;
+						DevelopmentTeam = 24GAHA6XL7;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -304,11 +304,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 59R6D7WJ6M;
+				DEVELOPMENT_TEAM = 24GAHA6XL7;
 				INFOPLIST_FILE = SPDebugBar/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = lishping.SPDebugBar;
+				PRODUCT_BUNDLE_IDENTIFIER = com.36kr.SPDebugBar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -319,11 +319,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 59R6D7WJ6M;
+				DEVELOPMENT_TEAM = 24GAHA6XL7;
 				INFOPLIST_FILE = SPDebugBar/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = lishping.SPDebugBar;
+				PRODUCT_BUNDLE_IDENTIFIER = com.36kr.SPDebugBar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

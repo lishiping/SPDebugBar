@@ -170,7 +170,7 @@ static SPDebugBar* instance = nil;
     //FPS
     NSString* fpsInfo = [NSString stringWithFormat:@"FPS:%lu", (unsigned long)self.fps];
     
-    _tipLabel.text = [NSString stringWithFormat:@"%@ %@ %@", cpuInfo, memoryInfo,fpsInfo];
+    _tipLabel.text = [NSString stringWithFormat:@"%@ %@ %@", cpuInfo,fpsInfo,memoryInfo];
 }
 
 //弹出配置页面
