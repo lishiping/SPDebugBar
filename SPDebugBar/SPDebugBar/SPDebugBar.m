@@ -108,7 +108,7 @@ static SPDebugBar* instance = nil;
     {
         //如果地址不合法，返回错误信息
         if (self.selectArrayBlock) {
-            self.selectArrayBlock(nil,[NSError errorWithDomain:@"url is illegal" code:-2 userInfo:nil]);
+            self.selectArrayBlock(nil,[NSError errorWithDomain:@"url is illegal，url must Be NSString" code:-2 userInfo:nil]);
             self.selectArrayBlock = nil;
         }
     }

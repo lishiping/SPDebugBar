@@ -5,6 +5,10 @@
 //  Created by lishiping on 16/9/19.
 //  Copyright © 2016年 lishiping. All rights reserved.
 //
+
+#define SP_LANGUAGE_IS_EN         [[[NSLocale preferredLanguages] objectAtIndex:0] isEqualToString:@"en"]
+
+
 #import "SPServerListVC.h"
 
 @interface SPServerListVC () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate,UIAlertViewDelegate>
@@ -23,7 +27,7 @@
 {
     [super viewDidLoad];
     
-    self.title = @"Server Table";
+    self.title = SP_LANGUAGE_IS_EN ? @"Server Table" : @"服务器列表";
     
     [self.view addSubview:self.tableView];
     
@@ -45,7 +49,7 @@
     
     UILabel *authorLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 250, CGRectGetWidth(_tableView.frame), 30)];
     authorLabel.textColor = [UIColor darkGrayColor];
-    authorLabel.text = @"Author:lishiping(李世平)  e-mail:83118274@qq.com";
+    authorLabel.text = SP_LANGUAGE_IS_EN ? @"Author:lishiping e-mail:83118274@qq.com" : @"作者:李世平 邮箱:83118274@qq.com";
     [authorLabel setFont:[UIFont systemFontOfSize:12]];
     authorLabel.textAlignment = NSTextAlignmentCenter;
     [tableFooterView addSubview:authorLabel];
@@ -112,10 +116,10 @@
 -(void)addButtonItem
 {
     //取消按钮
-    UIBarButtonItem *cancelItem  = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(dismiss)];
+    UIBarButtonItem *cancelItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_EN ? @"Cancel" : @"取消" style:UIBarButtonItemStylePlain target:self action:@selector(dismiss)];
     
     //清除按钮
-    UIBarButtonItem *cleanItem  = [[UIBarButtonItem alloc] initWithTitle:@"Clean" style:UIBarButtonItemStylePlain target:self action:@selector(cleanUserDefault)];
+    UIBarButtonItem *cleanItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_EN ? @"Clean" : @"清除" style:UIBarButtonItemStylePlain target:self action:@selector(cleanUserDefault)];
     
     
     NSArray *oldGivenArr = [[NSUserDefaults standardUserDefaults] objectForKey:SP_GIVENSERVERLIST];
@@ -131,7 +135,7 @@
     }
     
     //确定按钮
-    [self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"OK" style:UIBarButtonItemStylePlain target:self action:@selector(confirm)] animated:YES];
+    [self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_EN ? @"OK" : @"确定" style:UIBarButtonItemStylePlain target:self action:@selector(confirm)] animated:YES];
     
 }
 
@@ -142,7 +146,7 @@
 
 -(void)cleanUserDefault
 {
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Do you want to remove the local manually enter additional service address?Remove address list after back to the given address list" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:SP_LANGUAGE_IS_EN ? @"Do you want to remove the local manually enter additional service address?Remove address list after back to the given address list" : @"你想要移除本地手动添加的额外地址吗？移除之后恢复成初始化给定的列表" delegate:self cancelButtonTitle:SP_LANGUAGE_IS_EN ? @"Cancel" : @"取消" otherButtonTitles:SP_LANGUAGE_IS_EN ? @"OK" : @"确定", nil];
     [alert show];
 }
 
@@ -284,16 +288,15 @@
     
     UILabel *headLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, CGRectGetWidth(tableView.frame), 20)];
     headLabel.textColor = [UIColor yellowColor];
-    headLabel.text =[NSString stringWithFormat:@"The %ld section of the selected address",(long)section+1];
+    headLabel.text =SP_LANGUAGE_IS_EN ? [NSString stringWithFormat:@"The %ld section of the selected address",(long)section+1] : [NSString stringWithFormat:@"第 %ld 组选中的地址",(long)section+1] ;
     
     [headView addSubview:headLabel];
     
     UITextField *headTextField = [[UITextField alloc] initWithFrame:CGRectMake(10, 20, CGRectGetWidth(tableView.frame)-10, 40)];
     headTextField.tag = section+200;
-    NSLog(@"输入框tag%ld",(long)headTextField.tag);
     headTextField.textColor = [UIColor greenColor];
     headTextField.textAlignment = NSTextAlignmentLeft;
-    headTextField.placeholder = @"Input URL!!";
+    headTextField.placeholder =SP_LANGUAGE_IS_EN ? @"Input URL!!" : @"输入地址";
     headTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
     headTextField.text = [self.selectMArr objectAtIndex:section];
     headTextField.adjustsFontSizeToFitWidth = YES;
@@ -364,7 +367,7 @@
     }
     else
     {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:@"The address of the server can't be empty, please re-enter" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:SP_LANGUAGE_IS_EN ? @"The address of the server can't be empty, please re-enter" : @"输入的地址不能为空，请重新输入" delegate:nil cancelButtonTitle:SP_LANGUAGE_IS_EN ? @"OK" : @"确定" otherButtonTitles:nil, nil];
         [alert show];
     }
 }
