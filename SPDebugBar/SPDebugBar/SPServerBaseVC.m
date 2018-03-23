@@ -5,6 +5,7 @@
 //  Copyright © 2016年 lishiping. All rights reserved.
 //
 
+
 #import "SPServerBaseVC.h"
 
 @interface SPServerBaseVC ()
@@ -16,7 +17,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 //    [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait animated:YES];
-
 }
 
 // 竖屏

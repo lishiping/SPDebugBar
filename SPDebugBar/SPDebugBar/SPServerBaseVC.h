@@ -15,6 +15,8 @@
 //github address//https://github.com/lishiping/SPCategory
 //github address//https://github.com/lishiping/SPBaseClass
 
+#define SP_LANGUAGE_IS_EN         [[[NSLocale preferredLanguages] objectAtIndex:0] isEqualToString:@"en"]
+
 #import <UIKit/UIKit.h>
 
 @interface SPServerBaseVC : UIViewController

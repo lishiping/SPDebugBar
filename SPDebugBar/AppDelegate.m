@@ -43,20 +43,35 @@
     
 #if (DEBUG || TEST)
     {
-        NSArray* serverArr = @[
-                               @"https://api.baidu.com",
-                               @"http://api.baidu.com",
-                               @"http://api.ceshi.baidu.com"
-                               ];
+        NSDictionary* serverDic = @{
+                                    SP_TITLE_KEY:@"百度服务器地址",
+                                    SP_SERVERLIST_KEY: @[
+                                            @"https://api.baidu.com",
+                                            @"http://api.baidu.com",
+                                            @"http://api.ceshi.baidu.com"
+                                            ]
+
+                                    };
+
+        NSDictionary *panServerDic = @{
+                                       SP_TITLE_KEY:@"百度网盘地址",
+                                       SP_SERVERLIST_KEY: @[
+                                               @"https://api.pan.baidu.com",
+                                               @"http://api.pan.baidu.com",
+                                               @"http://api.ceshi.pan.baidu.com",
+                                               @"http://api.test.pan.baidu.com"
+                                               ]};
         
-        NSArray *panServerArr = @[
-                                  @"https://api.pan.baidu.com",
-                                  @"http://api.pan.baidu.com",
-                                  @"http://api.ceshi.pan.baidu.com",
-                                  @"http://api.test.pan.baidu.com"
-                                  ];
+        NSDictionary *imServerDic = @{
+                                       SP_TITLE_KEY:@"百度聊天地址",
+                                       SP_SERVERLIST_KEY: @[
+                                               @"https://api.pan.baidu.com",
+                                               @"http://api.pan.baidu.com",
+                                               @"http://api.ceshi.pan.baidu.com",
+                                               @"http://api.test.pan.baidu.com"
+                                               ]};
         
-        NSArray *serverArray = [NSArray arrayWithObjects:serverArr,panServerArr, nil];
+        NSArray *serverArray = [NSArray arrayWithObjects:serverDic,panServerDic,imServerDic, nil];
         
         [SPDebugBar sharedInstanceWithServerArray:serverArray SelectArrayBlock:^(NSArray *objects, NSError *error)
          {

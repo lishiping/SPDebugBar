@@ -22,12 +22,19 @@
 #define SP_ALLSERVERLIST @"SPAllServerList"//所有服务器地址缓存
 #define SP_SELECTSERVERLIST @"SPSelectServerList"//选择的服务器地址缓存
 
+#define SP_TITLE_KEY @"title"//服务器列表每组的名称键值
+#define SP_SERVERLIST_KEY @"server_address"//服务器列表数组每组的键值
+
 typedef void (^NSArrayResultBlock)(NSArray* array);
 
 @interface SPServerListVC : SPServerBaseVC
 
 @property(nonatomic,copy)NSArrayResultBlock selectServerArrayBlock;//选择地址后回调
 @property (strong, nonatomic) NSArray *tempserverArr;//给定的服务器地址数组
+
+
+//检查给定服务器地址是否合法,只检查了字符串，没检查url地址的正则表达式
++(BOOL)checkArray:(NSArray*)serverArr;
 
 /**
  获得已经选中的服务地址，如果第一次启动，没有选择过，则返回每组的第一个，如果有本地缓存，则返回本地缓存服务地址

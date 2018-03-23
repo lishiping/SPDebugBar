@@ -7,6 +7,7 @@
 
 #import "SPDebugBar.h"
 #import "UIDevice-SPHardware.h"
+#import "SPDebugVC.h"
 
 @interface SPDebugBar ()
 
@@ -75,7 +76,7 @@ static SPDebugBar* instance = nil;
     [self addSubview:_tipLabel];
     
     //添加长按手势弹出配置界面
-    UILongPressGestureRecognizer* longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(presentConfigPageVC)];
+    UILongPressGestureRecognizer* longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(presentDebugVC)];
     [self addGestureRecognizer:longPressGesture];
     
     //添加单击手势隐藏和显示页面
@@ -92,16 +93,19 @@ static SPDebugBar* instance = nil;
 
 -(void)configServerArray:(NSArray *)serverArray selectArrayBlock:(SPArrayResultBlock)selectArrayBlock
 {
+    //开始监听设备，获取活动消息
+    [self startMonitorDevice];
+    
     self.serverArray = serverArray;
     self.selectArrayBlock = selectArrayBlock;
     
     //检查服务器地址数组是否合法
-    if ([self checkArray:serverArray]) {
+    if ([SPServerListVC checkArray:serverArray]) {
         //服务器地址合法返回本地缓存选择过得地址，没有选择过得地址，默认选择每一组的第一个作为该组的选中地址
-        NSArray *selectArr =[SPServerListVC getSelectArrayWithServerArray:_serverArray];
+        NSArray *selectArr =[SPServerListVC getSelectArrayWithServerArray:serverArray];
         
         if (self.selectArrayBlock && selectArr.count>0) {
-            self.selectArrayBlock([selectArr copy],nil);
+            self.selectArrayBlock(selectArr,nil);
         }
     }
     else
@@ -113,36 +117,9 @@ static SPDebugBar* instance = nil;
         }
     }
     
-    //开始监听设备，获取活动消息
-    [self startMonitorDevice];
+
 }
 
-#pragma mark - check
-//检查给定服务器地址是否合法,只检查了字符串，没检查url地址的正则表达式
--(BOOL)checkArray:(NSArray*)serverArr
-{
-    BOOL ret = YES;
-    if ([serverArr isKindOfClass:[NSArray class]] && serverArr.count>0) {
-        for (NSArray *arr in serverArr) {
-            if ([arr isKindOfClass:[NSArray class]] && arr.count>0) {
-                for (NSString *serverUrl in arr) {
-                    if (![serverUrl isKindOfClass:[NSString class]] || serverUrl.length<1) {
-                        ret = NO;
-                    }
-                }
-            }
-            else
-            {
-                ret = NO;
-            }
-        }
-    }
-    else
-    {
-        ret = NO;
-    }
-    return ret;
-}
 
 #pragma mark - events
 // 实时更新资源使用情况
@@ -174,30 +151,53 @@ static SPDebugBar* instance = nil;
 }
 
 //弹出配置页面
-- (void)presentConfigPageVC
+- (void)presentDebugVC
 {
+//    self.tipLabel.hidden= NO;
+//
+//    UIViewController *vc = [[UIApplication sharedApplication].delegate window].rootViewController;
+//    if ([vc presentedViewController]) {
+//        return;
+//    }
+//
+//    //弹出配置页面
+//    SPServerListVC* serverListVC = [[SPServerListVC alloc] init];
+//    serverListVC.tempserverArr =self.serverArray;
+//
+//    //页面选择回调地址
+//    __weak __typeof(self) weakSelf = self;
+//    serverListVC.selectServerArrayBlock = ^(NSArray *array){
+//        __strong __typeof(weakSelf) strongSelf = weakSelf;
+//
+//        if (strongSelf.selectArrayBlock && array.count>0) {
+//            strongSelf.selectArrayBlock([array copy],nil);
+//        }
+//    };
+//    UINavigationController* navigationController = [[UINavigationController alloc] initWithRootViewController:serverListVC];
+//    [vc presentViewController:navigationController animated:YES completion:nil];
+    
+    
     self.tipLabel.hidden= NO;
     
-    UIViewController *vc = [[UIApplication sharedApplication].delegate window].rootViewController;
-    if ([vc presentedViewController]) {
+    UIViewController *rootVC = [[UIApplication sharedApplication].delegate window].rootViewController;
+    if ([rootVC presentedViewController]) {
         return;
     }
     
     //弹出配置页面
-    SPServerListVC* serverListVC = [[SPServerListVC alloc] init];
-    serverListVC.tempserverArr =self.serverArray;
+    SPDebugVC* debugVC = [[SPDebugVC alloc] init];
+    debugVC.tempserverArr =self.serverArray;
     
     //页面选择回调地址
     __weak __typeof(self) weakSelf = self;
-    serverListVC.selectServerArrayBlock = ^(NSArray *array){
+    debugVC.selectServerArrayBlock = ^(NSArray *array){
         __strong __typeof(weakSelf) strongSelf = weakSelf;
-        
         if (strongSelf.selectArrayBlock && array.count>0) {
-            strongSelf.selectArrayBlock([array copy],nil);
+            strongSelf.selectArrayBlock(array,nil);
         }
     };
-    UINavigationController* navigationController = [[UINavigationController alloc] initWithRootViewController:serverListVC];
-    [vc presentViewController:navigationController animated:YES completion:nil];
+    UINavigationController* navigationController = [[UINavigationController alloc] initWithRootViewController:debugVC];
+    [rootVC presentViewController:navigationController animated:YES completion:nil];
 }
 
 //收到内存警告，启动动画
@@ -206,7 +206,7 @@ static SPDebugBar* instance = nil;
     _isStartWarningNum = 1;
 }
 
-//调试条动画
+//内存警告时候，调试条动画闪烁
 -(void)tipLabelAnimation
 {
     [UIView animateWithDuration:0.5f animations:^{
@@ -227,7 +227,7 @@ static SPDebugBar* instance = nil;
     //
     //    [_monitorTimer fire];
     
-    //开始使用timer刷新，但是我想加入刷新fps功能，所以就得改成使用displayLink刷新
+    //之前使用timer刷新，但是我想加入刷新fps功能，所以就得改成使用displayLink刷新
     [self setupDisplayLink];
 }
 

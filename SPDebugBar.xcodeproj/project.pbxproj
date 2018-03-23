@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1EAA41632052801E005BA1D0 /* SPDebugVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAA41622052801E005BA1D0 /* SPDebugVC.m */; };
+		1EAA416620529879005BA1D0 /* SPNSUserDefaultsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAA416520529879005BA1D0 /* SPNSUserDefaultsVC.m */; };
 		E15C00B81E1D0A5700E0219B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E15C00B71E1D0A5700E0219B /* main.m */; };
 		E15C00BB1E1D0A5700E0219B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E15C00BA1E1D0A5700E0219B /* AppDelegate.m */; };
 		E15C00BE1E1D0A5700E0219B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E15C00BD1E1D0A5700E0219B /* ViewController.m */; };
@@ -20,6 +22,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1EAA41612052801E005BA1D0 /* SPDebugVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SPDebugVC.h; sourceTree = "<group>"; };
+		1EAA41622052801E005BA1D0 /* SPDebugVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SPDebugVC.m; sourceTree = "<group>"; };
+		1EAA416420529879005BA1D0 /* SPNSUserDefaultsVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SPNSUserDefaultsVC.h; sourceTree = "<group>"; };
+		1EAA416520529879005BA1D0 /* SPNSUserDefaultsVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SPNSUserDefaultsVC.m; sourceTree = "<group>"; };
 		E15C00B31E1D0A5700E0219B /* SPDebugBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SPDebugBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E15C00B71E1D0A5700E0219B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E15C00B91E1D0A5700E0219B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -97,12 +103,16 @@
 			children = (
 				E15C00CE1E1D0AAF00E0219B /* SPDebugBar.h */,
 				E15C00CF1E1D0AAF00E0219B /* SPDebugBar.m */,
+				1EAA41612052801E005BA1D0 /* SPDebugVC.h */,
+				1EAA41622052801E005BA1D0 /* SPDebugVC.m */,
 				E15C00D01E1D0AAF00E0219B /* SPServerBaseVC.h */,
 				E15C00D11E1D0AAF00E0219B /* SPServerBaseVC.m */,
 				E15C00D41E1D0AAF00E0219B /* SPServerListVC.h */,
 				E15C00D51E1D0AAF00E0219B /* SPServerListVC.m */,
 				E15C00D61E1D0AAF00E0219B /* UIDevice-SPHardware.h */,
 				E15C00D71E1D0AAF00E0219B /* UIDevice-SPHardware.m */,
+				1EAA416420529879005BA1D0 /* SPNSUserDefaultsVC.h */,
+				1EAA416520529879005BA1D0 /* SPNSUserDefaultsVC.m */,
 			);
 			path = SPDebugBar;
 			sourceTree = "<group>";
@@ -179,7 +189,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1EAA416620529879005BA1D0 /* SPNSUserDefaultsVC.m in Sources */,
 				E15C00BE1E1D0A5700E0219B /* ViewController.m in Sources */,
+				1EAA41632052801E005BA1D0 /* SPDebugVC.m in Sources */,
 				E15C00DB1E1D0AAF00E0219B /* SPServerListVC.m in Sources */,
 				E15C00BB1E1D0A5700E0219B /* AppDelegate.m in Sources */,
 				E15C00B81E1D0A5700E0219B /* main.m in Sources */,

@@ -6,8 +6,6 @@
 //  Copyright © 2016年 lishiping. All rights reserved.
 //
 
-#define SP_LANGUAGE_IS_EN         [[[NSLocale preferredLanguages] objectAtIndex:0] isEqualToString:@"en"]
-
 
 #import "SPServerListVC.h"
 
@@ -38,8 +36,12 @@
     [self serverMArr];
     
     [self selectMArr];
-    
-    
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - copyright info
@@ -47,6 +49,7 @@
 {
     UIView *tableFooterView =[[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(_tableView.frame), 400)];
     
+    //author
     UILabel *authorLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 250, CGRectGetWidth(_tableView.frame), 30)];
     authorLabel.textColor = [UIColor darkGrayColor];
     authorLabel.text = SP_LANGUAGE_IS_EN ? @"Author:lishiping e-mail:83118274@qq.com" : @"作者:李世平 邮箱:83118274@qq.com";
@@ -70,6 +73,60 @@
     
 }
 
+#pragma mark - check
+//检查给定服务器地址是否合法,只检查了字符串，没检查url地址的正则表达式
++(BOOL)checkArray:(NSArray*)serverArr
+{
+    BOOL ret = NO;
+    if ([serverArr isKindOfClass:[NSArray class]] && serverArr.count>0)
+    {
+        for (NSDictionary *dic in serverArr)
+        {
+            if ([dic isKindOfClass:[NSDictionary class]] && dic.count>0) {
+                
+                NSString *title = [dic objectForKey:@"title"];
+                if ([title isKindOfClass:NSString.class]&& title.length>0)
+                {
+                    ret = YES;
+                }
+                else
+                {
+                    return NO;
+                }
+                
+                NSArray *arr = [dic objectForKey:SP_SERVERLIST_KEY];
+                if ([arr isKindOfClass:[NSArray class]]&&arr.count>0)
+                {
+                    for (NSString *string in arr) {
+                        if ([string isKindOfClass:[NSString class]] && string.length>0)
+                        {
+                            //都是字符串，并有长度
+                            ret = YES;
+                        }else
+                        {
+                            //不是字符串就返回不通过
+                            return NO;
+                        }
+                    }
+                }
+                else
+                {
+                    return NO;
+                }
+            }
+            else
+            {
+                return NO;
+            }
+        }
+    }
+    else
+    {
+        return NO;
+    }
+    return ret;
+}
+
 +(NSArray *)getSelectArrayWithServerArray:(NSArray*)serverArr
 {
     NSMutableArray *selectMArr = [NSMutableArray arrayWithCapacity:0];
@@ -88,24 +145,25 @@
     
     for (int i= 0; i<array.count; i++) {
         
-        NSArray *anArray = array[i];
+        NSDictionary *anDic = array[i];
         
-        if ([anArray isKindOfClass:[NSArray class]]&&anArray.count>0) {
-            
-            NSString *firstObj =array[i][0];
-            if ([firstObj isKindOfClass:[NSString class]]&&firstObj.length>0) {
-                
+        if ([anDic isKindOfClass:[NSDictionary class]]&&anDic.count>0)
+        {
+            NSArray *serverArr = [anDic objectForKey:SP_SERVERLIST_KEY];
+            NSString *firstObj =serverArr[0];
+            if ([firstObj isKindOfClass:[NSString class]]&&firstObj.length>0)
+            {
                 [selectMArr addObject:firstObj];
             }
         }
     }
     
     //写入本地缓存
-    if (selectMArr.count>0) {
+    if (selectMArr.count>0)
+    {
         [[NSUserDefaults standardUserDefaults]  setObject:[selectMArr copy] forKey:SP_SELECTSERVERLIST];
         [[NSUserDefaults standardUserDefaults]  setObject:[serverArr copy] forKey:SP_GIVENSERVERLIST];
         [[NSUserDefaults standardUserDefaults]  setObject:[serverArr copy] forKey:SP_ALLSERVERLIST];
-        
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
@@ -115,33 +173,43 @@
 #pragma mark - add button item
 -(void)addButtonItem
 {
-    //取消按钮
-    UIBarButtonItem *cancelItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_EN ? @"Cancel" : @"取消" style:UIBarButtonItemStylePlain target:self action:@selector(dismiss)];
+    //返回按钮
+    UIBarButtonItem *backlItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_EN ? @"Back" : @"返回" style:UIBarButtonItemStylePlain target:self action:@selector(back)];
+    
+    //关闭按钮
+    UIBarButtonItem *closeItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_EN ? @"Close" : @"关闭" style:UIBarButtonItemStylePlain target:self action:@selector(dismiss)];
+
+    [self.navigationItem setLeftBarButtonItems:@[backlItem,closeItem]];
+    
+    //确定按钮
+    UIBarButtonItem *OKItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_EN ? @"OK" : @"确定" style:UIBarButtonItemStylePlain target:self action:@selector(confirm)];
+    
     
     //清除按钮
     UIBarButtonItem *cleanItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_EN ? @"Clean" : @"清除" style:UIBarButtonItemStylePlain target:self action:@selector(cleanUserDefault)];
-    
     
     NSArray *oldGivenArr = [[NSUserDefaults standardUserDefaults] objectForKey:SP_GIVENSERVERLIST];
     NSArray *oldAllArr = [[NSUserDefaults standardUserDefaults] objectForKey:SP_ALLSERVERLIST];
     
     //如果给定服务器地址和所有地址相同，说明没有后添加过，不需要清除
     if ([oldGivenArr isEqualToArray:oldAllArr]) {
-        [self.navigationItem setLeftBarButtonItems:@[cancelItem]];
+        [self.navigationItem setRightBarButtonItems:@[OKItem]];
     }
     else
     {
-        [self.navigationItem setLeftBarButtonItems:@[cancelItem,cleanItem]];
+        [self.navigationItem setRightBarButtonItems:@[OKItem,cleanItem]];
     }
-    
-    //确定按钮
-    [self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_EN ? @"OK" : @"确定" style:UIBarButtonItemStylePlain target:self action:@selector(confirm)] animated:YES];
     
 }
 
 - (void)dismiss
 {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)cleanUserDefault
@@ -153,26 +221,27 @@
 - (void)confirm
 {
     [self.view endEditing:YES];
-    if (self.selectMArr.count>0) {
-        
-        [[NSUserDefaults standardUserDefaults]  setObject:[self.selectMArr copy] forKey:SP_SELECTSERVERLIST];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
     
-    if (self.selectServerArrayBlock) {
-        self.selectServerArrayBlock(self.selectMArr);
+    if (self.selectMArr.count>0)
+    {
+        [[NSUserDefaults standardUserDefaults]  setObject:self.selectMArr forKey:SP_SELECTSERVERLIST];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        if (self.selectServerArrayBlock) {
+            self.selectServerArrayBlock([self.selectMArr copy]);
+        }
     }
     
     [self dismiss];
 }
 
 #pragma mark - 服务器数组里面是否存在新的地址
--(BOOL)serverArrIsExistUrl:(NSString*)tempUrl atIndex:(NSUInteger)index
+-(BOOL)serverArrIsExistURL:(NSString*)tempURL atIndex:(NSUInteger)index
 {
     BOOL ret =NO;
-    NSArray *oldtemp = self.serverMArr[index];
+    NSArray *oldtemp = [(NSDictionary*)(self.serverMArr[index]) objectForKey:SP_SERVERLIST_KEY];
     for (NSString *string in oldtemp) {
-        if ([string isEqualToString:tempUrl]) {
+        if ([string isEqualToString:tempURL]) {
             ret = YES;
         }
     }
@@ -214,6 +283,7 @@
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.separatorInset = UIEdgeInsetsZero;
+        _tableView.sectionFooterHeight = 1.0f;
         [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:
          NSStringFromClass([UITableViewCell class])];
     }
@@ -229,7 +299,9 @@
 
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[self.serverMArr objectAtIndex:section] count];
+    NSDictionary *dic = [self.serverMArr objectAtIndex:section];
+    
+    return ((NSArray*)[dic objectForKey:SP_SERVERLIST_KEY]).count;
 }
 
 - (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath
@@ -238,7 +310,10 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:NSStringFromClass([UITableViewCell class])];
     }
-    cell.textLabel.text = [[self.serverMArr objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    NSDictionary *dic = [self.serverMArr objectAtIndex:indexPath.section];
+    NSArray *array = [dic objectForKey:SP_SERVERLIST_KEY];
+    
+    cell.textLabel.text =[array objectAtIndex:indexPath.row];
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
 
     return cell;
@@ -247,6 +322,10 @@
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
     [self.view endEditing:YES];
+    
+    //找到字符串
+    NSDictionary *dic =(NSDictionary*)[self.serverMArr objectAtIndex:indexPath.section];
+    NSString *text =[(NSArray*)[dic objectForKey:SP_SERVERLIST_KEY] objectAtIndex:indexPath.row];
     
     UITextField *textField = [tableView viewWithTag:(indexPath.section +200)];
     //有时候该方法找不到text，所以在tableview的subviews里面找
@@ -259,21 +338,24 @@
         }
     }
     
-    if (textField.text.length>0) {
-        NSString *text =[[self.serverMArr objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-        if (text.length>0) {
-            textField.text = text;
-            [self.selectMArr replaceObjectAtIndex:indexPath.section withObject:textField.text];
-        }
+    //换选中地址
+    if (textField && text.length>0)
+    {
+        textField.text = text;
+        [self.selectMArr replaceObjectAtIndex:indexPath.section withObject:text];
     }
 }
 
 - (void)tableView:(UITableView*)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath*)indexPath
 {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        NSMutableArray *ary = [NSMutableArray arrayWithArray:[self.serverMArr objectAtIndex:indexPath.section]];
-        [ary removeObjectAtIndex:indexPath.row];
-        [self.serverMArr replaceObjectAtIndex:indexPath.section withObject:ary];
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+    {
+        NSMutableDictionary *mdic = [[self.serverMArr objectAtIndex:indexPath.section] mutableCopy];
+        NSMutableArray *mArr = [[mdic objectForKey:SP_SERVERLIST_KEY] mutableCopy];
+        [mArr removeObjectAtIndex:indexPath.row];
+        
+        [mdic setValue:mArr forKey:SP_SERVERLIST_KEY];
+        [self.serverMArr replaceObjectAtIndex:indexPath.section withObject:mdic];
         
         [[NSUserDefaults standardUserDefaults] setObject:self.serverMArr forKey:SP_ALLSERVERLIST];
         [[NSUserDefaults standardUserDefaults] synchronize];
@@ -281,20 +363,31 @@
     }
 }
 
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
     UIView *headView =  [[UIView alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(tableView.frame), 60)];
-    headView.backgroundColor = [UIColor lightGrayColor];
+    headView.backgroundColor = [UIColor lightTextColor];
+    headView.layer.borderWidth = 1;
+    headView.layer.borderColor = [UIColor darkGrayColor].CGColor;
     
-    UILabel *headLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, CGRectGetWidth(tableView.frame), 20)];
-    headLabel.textColor = [UIColor yellowColor];
-    headLabel.text =SP_LANGUAGE_IS_EN ? [NSString stringWithFormat:@"The %ld section of the selected address",(long)section+1] : [NSString stringWithFormat:@"第 %ld 组选中的地址",(long)section+1] ;
-    
+    UILabel *headLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, CGRectGetWidth(tableView.frame), 20)];
+    headLabel.textColor = [UIColor redColor];
     [headView addSubview:headLabel];
     
-    UITextField *headTextField = [[UITextField alloc] initWithFrame:CGRectMake(10, 20, CGRectGetWidth(tableView.frame)-10, 40)];
+    NSDictionary *dic = [self.serverMArr objectAtIndex:section];
+    NSString *title = [dic objectForKey:SP_TITLE_KEY];
+    
+    if (title.length>0) {
+        headLabel.text = title;
+    }
+    else
+    {
+        headLabel.text =SP_LANGUAGE_IS_EN ? [NSString stringWithFormat:@"The %ld section of the selected address",(long)section+1] : [NSString stringWithFormat:@"第 %ld 组选中的地址",(long)section+1] ;
+    }
+    
+    UITextField *headTextField = [[UITextField alloc] initWithFrame:CGRectMake(10, 25, CGRectGetWidth(tableView.frame)-10, 35)];
     headTextField.tag = section+200;
-    headTextField.textColor = [UIColor greenColor];
+    headTextField.textColor = [UIColor redColor];
     headTextField.textAlignment = NSTextAlignmentLeft;
     headTextField.placeholder =SP_LANGUAGE_IS_EN ? @"Input URL!!" : @"输入地址";
     headTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
@@ -334,26 +427,26 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    //获取组索引
-    NSUInteger section =textField.tag -200;
-    
-    if (textField.text.length>0) {
-        
+    if (textField.text.length>0)
+    {
+        //获取组索引
+        NSUInteger section =textField.tag -200;
         //如果服务器地址里不存在该地址
-        if (![self serverArrIsExistUrl:textField.text atIndex:section]) {
+        if (![self serverArrIsExistURL:textField.text atIndex:section])
+        {
             //将新地址添加到服务器列表
-            NSMutableArray *oldServerArr = [NSMutableArray arrayWithArray:self.serverMArr];
+            NSMutableDictionary *mdic =[self.serverMArr[section] mutableCopy];
             
-            NSMutableArray *oldtemp =[NSMutableArray arrayWithArray:oldServerArr[section]] ;
+            NSMutableArray *oldtempArr =[NSMutableArray arrayWithArray:[mdic objectForKey:SP_SERVERLIST_KEY]];
             
-            [oldtemp addObject:textField.text];
+            [oldtempArr addObject:textField.text];
             
-            [oldServerArr replaceObjectAtIndex:section withObject:oldtemp];
+            [mdic setValue:oldtempArr forKey:SP_SERVERLIST_KEY];
             
-            self.serverMArr = oldServerArr;
+            [self.serverMArr replaceObjectAtIndex:section withObject:mdic];
             
             //服务器地址重新写入
-            [[NSUserDefaults standardUserDefaults] setObject:oldServerArr forKey:SP_ALLSERVERLIST];
+            [[NSUserDefaults standardUserDefaults] setObject:self.serverMArr forKey:SP_ALLSERVERLIST];
         }
         
         //旧地址替换成新地址
@@ -376,10 +469,10 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     //确认清除后添加的
-    if (buttonIndex==1) {
-        
+    if (buttonIndex==1&&self.tempserverArr.count>0)
+    {
         //服务器地址重新写入
-        [[NSUserDefaults standardUserDefaults] setObject:[self.tempserverArr copy] forKey:SP_ALLSERVERLIST];
+        [[NSUserDefaults standardUserDefaults] setObject:self.tempserverArr forKey:SP_ALLSERVERLIST];
         [[NSUserDefaults standardUserDefaults] synchronize];
         self.serverMArr = [NSMutableArray arrayWithArray:self.tempserverArr];
         [self.tableView reloadData];
@@ -388,10 +481,5 @@
     }
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 @end
