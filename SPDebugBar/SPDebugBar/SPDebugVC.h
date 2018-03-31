@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SPDebugBaseVC.h"
 #import "SPServerListVC.h"
 
-@interface SPDebugVC : UIViewController
+@interface SPDebugVC : SPDebugBaseVC
 
-@property(nonatomic,copy)NSArrayResultBlock selectServerArrayBlock;//选择地址后回调
-@property (strong, nonatomic) NSArray *tempserverArr;//给定的服务器地址数组
+@property (strong, nonatomic) NSArray *tableArr;//服务器地址数组
+@property (copy, nonatomic) NSIndexPathResultBlock tableBlock; //调试工具自定义传进来的数组名字列表回调
 
 @end

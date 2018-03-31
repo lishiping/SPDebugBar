@@ -29,8 +29,6 @@
     
     [self.view addSubview:self.tableView];
     
-    [self configCopyRightInfo];
-    
     [self addButtonItem];
     
     [self serverMArr];
@@ -42,35 +40,6 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - copyright info
--(void)configCopyRightInfo
-{
-    UIView *tableFooterView =[[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(_tableView.frame), 400)];
-    
-    //author
-    UILabel *authorLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 250, CGRectGetWidth(_tableView.frame), 30)];
-    authorLabel.textColor = [UIColor darkGrayColor];
-    authorLabel.text = SP_LANGUAGE_IS_EN ? @"Author:lishiping e-mail:83118274@qq.com" : @"作者:李世平 邮箱:83118274@qq.com";
-    [authorLabel setFont:[UIFont systemFontOfSize:12]];
-    authorLabel.textAlignment = NSTextAlignmentCenter;
-    [tableFooterView addSubview:authorLabel];
-    
-    //version
-    NSString *applicationVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    NSString *applicationBuild = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
-    NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
-    
-    UILabel *versionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 220, CGRectGetWidth(_tableView.frame), 30)];
-    versionLabel.textColor = [UIColor darkGrayColor];
-    versionLabel.text = [NSString stringWithFormat:@"APP v%@  Build(%@)  iOS(%@)",applicationVersion,applicationBuild,systemVersion];
-    [versionLabel setFont:[UIFont systemFontOfSize:12]];
-    versionLabel.textAlignment = NSTextAlignmentCenter;
-    [tableFooterView addSubview:versionLabel];
-    
-    self.tableView.tableFooterView = tableFooterView;
-    
 }
 
 #pragma mark - check
@@ -94,7 +63,7 @@
                     return NO;
                 }
                 
-                NSArray *arr = [dic objectForKey:SP_SERVERLIST_KEY];
+                NSArray *arr = [dic objectForKey:SP_ARRAY_KEY];
                 if ([arr isKindOfClass:[NSArray class]]&&arr.count>0)
                 {
                     for (NSString *string in arr) {
@@ -149,7 +118,7 @@
         
         if ([anDic isKindOfClass:[NSDictionary class]]&&anDic.count>0)
         {
-            NSArray *serverArr = [anDic objectForKey:SP_SERVERLIST_KEY];
+            NSArray *serverArr = [anDic objectForKey:SP_ARRAY_KEY];
             NSString *firstObj =serverArr[0];
             if ([firstObj isKindOfClass:[NSString class]]&&firstObj.length>0)
             {
@@ -172,15 +141,7 @@
 
 #pragma mark - add button item
 -(void)addButtonItem
-{
-    //返回按钮
-    UIBarButtonItem *backlItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_EN ? @"Back" : @"返回" style:UIBarButtonItemStylePlain target:self action:@selector(back)];
-    
-    //关闭按钮
-    UIBarButtonItem *closeItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_EN ? @"Close" : @"关闭" style:UIBarButtonItemStylePlain target:self action:@selector(dismiss)];
-
-    [self.navigationItem setLeftBarButtonItems:@[backlItem,closeItem]];
-    
+{    
     //确定按钮
     UIBarButtonItem *OKItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_EN ? @"OK" : @"确定" style:UIBarButtonItemStylePlain target:self action:@selector(confirm)];
     
@@ -200,16 +161,6 @@
         [self.navigationItem setRightBarButtonItems:@[OKItem,cleanItem]];
     }
     
-}
-
-- (void)dismiss
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)back
-{
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)cleanUserDefault
@@ -239,7 +190,7 @@
 -(BOOL)serverArrIsExistURL:(NSString*)tempURL atIndex:(NSUInteger)index
 {
     BOOL ret =NO;
-    NSArray *oldtemp = [(NSDictionary*)(self.serverMArr[index]) objectForKey:SP_SERVERLIST_KEY];
+    NSArray *oldtemp = [(NSDictionary*)(self.serverMArr[index]) objectForKey:SP_ARRAY_KEY];
     for (NSString *string in oldtemp) {
         if ([string isEqualToString:tempURL]) {
             ret = YES;
@@ -286,6 +237,9 @@
         _tableView.sectionFooterHeight = 1.0f;
         [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:
          NSStringFromClass([UITableViewCell class])];
+        
+        //使用父类视图
+        _tableView.tableFooterView = self.class.tableFooterView;
     }
     return _tableView;
 }
@@ -301,7 +255,7 @@
 {
     NSDictionary *dic = [self.serverMArr objectAtIndex:section];
     
-    return ((NSArray*)[dic objectForKey:SP_SERVERLIST_KEY]).count;
+    return ((NSArray*)[dic objectForKey:SP_ARRAY_KEY]).count;
 }
 
 - (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath
@@ -311,7 +265,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:NSStringFromClass([UITableViewCell class])];
     }
     NSDictionary *dic = [self.serverMArr objectAtIndex:indexPath.section];
-    NSArray *array = [dic objectForKey:SP_SERVERLIST_KEY];
+    NSArray *array = [dic objectForKey:SP_ARRAY_KEY];
     
     cell.textLabel.text =[array objectAtIndex:indexPath.row];
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
@@ -325,7 +279,7 @@
     
     //找到字符串
     NSDictionary *dic =(NSDictionary*)[self.serverMArr objectAtIndex:indexPath.section];
-    NSString *text =[(NSArray*)[dic objectForKey:SP_SERVERLIST_KEY] objectAtIndex:indexPath.row];
+    NSString *text =[(NSArray*)[dic objectForKey:SP_ARRAY_KEY] objectAtIndex:indexPath.row];
     
     UITextField *textField = [tableView viewWithTag:(indexPath.section +200)];
     //有时候该方法找不到text，所以在tableview的subviews里面找
@@ -351,10 +305,10 @@
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
         NSMutableDictionary *mdic = [[self.serverMArr objectAtIndex:indexPath.section] mutableCopy];
-        NSMutableArray *mArr = [[mdic objectForKey:SP_SERVERLIST_KEY] mutableCopy];
+        NSMutableArray *mArr = [[mdic objectForKey:SP_ARRAY_KEY] mutableCopy];
         [mArr removeObjectAtIndex:indexPath.row];
         
-        [mdic setValue:mArr forKey:SP_SERVERLIST_KEY];
+        [mdic setValue:mArr forKey:SP_ARRAY_KEY];
         [self.serverMArr replaceObjectAtIndex:indexPath.section withObject:mdic];
         
         [[NSUserDefaults standardUserDefaults] setObject:self.serverMArr forKey:SP_ALLSERVERLIST];
@@ -437,11 +391,11 @@
             //将新地址添加到服务器列表
             NSMutableDictionary *mdic =[self.serverMArr[section] mutableCopy];
             
-            NSMutableArray *oldtempArr =[NSMutableArray arrayWithArray:[mdic objectForKey:SP_SERVERLIST_KEY]];
+            NSMutableArray *oldtempArr =[NSMutableArray arrayWithArray:[mdic objectForKey:SP_ARRAY_KEY]];
             
             [oldtempArr addObject:textField.text];
             
-            [mdic setValue:oldtempArr forKey:SP_SERVERLIST_KEY];
+            [mdic setValue:oldtempArr forKey:SP_ARRAY_KEY];
             
             [self.serverMArr replaceObjectAtIndex:section withObject:mdic];
             

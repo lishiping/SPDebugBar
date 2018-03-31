@@ -10,8 +10,7 @@
 
 @interface ViewController ()
 
-@property(nonatomic,strong)UILabel *firstLabel;
-@property(nonatomic,strong)UILabel *secondLabel;
+
 
 @end
 
@@ -23,22 +22,18 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     self.firstLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, CGRectGetWidth(self.view.frame), 50)];
-    self.firstLabel.text = _firstStr;
     self.firstLabel.textColor = [UIColor redColor];
     [self.view addSubview:self.firstLabel];
     
     self.secondLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 200, CGRectGetWidth(self.view.frame), 50)];
-    self.secondLabel.text =_sceondStr;
     self.secondLabel.textColor = [UIColor redColor];
     [self.view addSubview:self.secondLabel];
     
+    self.thirdLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 300, CGRectGetWidth(self.view.frame), 50)];
+    self.thirdLabel.textColor = [UIColor redColor];
+    [self.view addSubview:self.thirdLabel];
 }
 
--(void)refreshLabel
-{
-    self.firstLabel.text = _firstStr;
-    self.secondLabel.text =_sceondStr;
-}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -10,10 +10,9 @@
 
 @interface ViewController : UIViewController
 
-@property(nonatomic,strong)NSString *firstStr;
-@property(nonatomic,strong)NSString *sceondStr;
-
--(void)refreshLabel;
+@property(nonatomic,strong)UILabel *firstLabel;
+@property(nonatomic,strong)UILabel *secondLabel;
+@property(nonatomic,strong)UILabel *thirdLabel;
 
 @end
 

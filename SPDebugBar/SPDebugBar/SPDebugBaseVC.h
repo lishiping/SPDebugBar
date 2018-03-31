@@ -1,5 +1,5 @@
 //
-//  SPServerBaseVC.h
+//  SPDebugBaseVC.h
 //  e-mail:83118274@qq.com
 //  Created by lishiping on 16/9/19.
 //  Copyright © 2016年 lishiping. All rights reserved.
@@ -17,8 +17,20 @@
 
 #define SP_LANGUAGE_IS_EN         [[[NSLocale preferredLanguages] objectAtIndex:0] isEqualToString:@"en"]
 
+
 #import <UIKit/UIKit.h>
 
-@interface SPServerBaseVC : UIViewController
+typedef void (^NSArrayResultBlock)(NSArray* array);
+typedef void (^NSIndexPathResultBlock)(NSIndexPath* indexPath);
+typedef void (^SPArrayResultBlock)(NSArray* objects, NSError *error);
+typedef void (^SPStringResultBlock)(UINavigationController *navigationController,NSString* string,NSError *error);
+
+@interface SPDebugBaseVC : UIViewController
+
+- (void)dismiss;
+
+- (void)back;
+
++(UIView *)tableFooterView;
 
 @end

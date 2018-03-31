@@ -11,19 +11,21 @@
 @interface SPNSUserDefaultsVC ()<UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate,UIAlertViewDelegate>
 
 @property (strong, nonatomic) UITableView* tableView;
-@property (strong, nonatomic) NSArray *tableDataArr;//服务器地址数组
-@property (strong, nonatomic) NSDictionary *userDefaultDic;//服务器地址数组
+@property (strong, nonatomic) NSArray *tableDataArr;//数组
+@property (strong, nonatomic) UIActivityIndicatorView *activityIndicatorView;
 
 @end
 
 @implementation SPNSUserDefaultsVC
 
+#pragma mark - life cycle
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"NSUserDefaults的key列表";
+    self.title = SP_LANGUAGE_IS_EN ? @"Allkeys of NSUserDefaults" : @"NSUserDefaults的key列表";
     self.view.backgroundColor = [UIColor whiteColor];
     [self addButtonItem];
     [self.view addSubview:self.tableView];
+    [self.view addSubview:self.activityIndicatorView];
     [self refreshData];
 }
 
@@ -34,60 +36,38 @@
 #pragma mark - add button item
 -(void)addButtonItem
 {
-    //返回按钮
-    UIBarButtonItem *backlItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_EN ? @"Back" : @"返回" style:UIBarButtonItemStylePlain target:self action:@selector(back)];
-    
-    //关闭按钮
-    UIBarButtonItem *closeItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_EN ? @"Close" : @"关闭" style:UIBarButtonItemStylePlain target:self action:@selector(dismiss)];
-    
-    [self.navigationItem setLeftBarButtonItems:@[backlItem,closeItem]];
-    
-    
     //添加按钮
     UIBarButtonItem *addItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_EN ? @"Add" : @"添加" style:UIBarButtonItemStylePlain target:self action:@selector(add)];
     
-    //清除按钮
-    UIBarButtonItem *cleanItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_EN ? @"Clean" : @"清除" style:UIBarButtonItemStylePlain target:self action:@selector(add)];
-    
-    
-    [self.navigationItem setRightBarButtonItems:@[addItem,cleanItem]];
-}
-
-- (void)dismiss
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)back
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
--(void)add
-{
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"添加一个键值对" message:@"" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-    alert.tag = 101;
-    [alert setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
-    [alert textFieldAtIndex:0].placeholder =@"key";
-    [alert textFieldAtIndex:1].placeholder =@"value";
-    [alert textFieldAtIndex:1].secureTextEntry = NO;
-
-    [alert show];
+    [self.navigationItem setRightBarButtonItems:@[addItem]];
 }
 
 -(void)refreshData
 {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.activityIndicatorView.hidden = NO;
+        [self.activityIndicatorView startAnimating];
+    });
+    
+    //延迟获取的原因是立即执行获取的数据不准确，比如移除的数据还存在
+    [self performSelector:@selector(delayGetUserDefault) withObject:nil afterDelay:1.0f];
+}
+
+-(void)delayGetUserDefault
+{
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        self.tableDataArr = self.getUserDefaultDic.allKeys;
+        _tableDataArr = [self.getUserDefaultDic allKeys];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
+            [self.activityIndicatorView stopAnimating];
         });
     });
 }
+
 #pragma mark - init ServerArray
 -(NSArray*)tableDataArr
 {
     if (!_tableDataArr) {
-//        _tableDataArr = self.getUserDefaultDic.allKeys;
         _tableDataArr =[[NSArray alloc] init];
     }
     return _tableDataArr;
@@ -95,39 +75,69 @@
 
 -(NSDictionary*)getUserDefaultDic
 {
-    //        NSDictionary*dic =  [user volatileDomainForName:NSArgumentDomain];
-    //        NSDictionary *dic2 = [user persistentDomainForName:@"com.36kr.SPDebugBar"];
-    
-    NSString *str =  [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"Preferences"];
+    NSString *str = [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"Preferences"];
     NSString *string = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
     NSString *url = [str stringByAppendingPathComponent:string];
     NSString *path =[NSString stringWithFormat:@"%@.plist",url];
-    _userDefaultDic = [NSDictionary dictionaryWithContentsOfFile:path];
-    return _userDefaultDic;
+    return [NSDictionary dictionaryWithContentsOfFile:path];
+}
+
+#pragma mark - activityIndicatorView
+-(UIActivityIndicatorView*)activityIndicatorView
+{
+    if (!_activityIndicatorView) {
+        _activityIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0,50, 50)];
+        _activityIndicatorView.center =self.view.center;
+        _activityIndicatorView.hidden = YES;
+        _activityIndicatorView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
+        _activityIndicatorView.layer.cornerRadius = 4;
+        _activityIndicatorView.layer.masksToBounds =YES;
+        _activityIndicatorView.hidesWhenStopped = YES;
+    }
+    return _activityIndicatorView;
 }
 
 #pragma mark - tableview
 -(UITableView*)tableView
 {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame)) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame)) style:UITableViewStyleGrouped];
         _tableView.dataSource = self;
         _tableView.delegate = self;
-        _tableView.separatorInset = UIEdgeInsetsZero;
-        _tableView.sectionFooterHeight = 1.0f;
         [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:
          NSStringFromClass([UITableViewCell class])];
-        _tableView.tableFooterView = nil;
+        //使用父类视图
+        _tableView.tableFooterView = self.class.tableFooterView;
+        
     }
     return _tableView;
 }
 
 #pragma mark - UITableView Delgate and Datasource
 
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSUInteger count =self.tableDataArr.count;
     return count;
+}
+
+- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UILabel *label = [[UILabel alloc] init];
+    label.textColor = [UIColor redColor];
+    label.numberOfLines = 2;
+    label.text = @"注意，添加或删除刷新后有时候并不能马上显示在列表上，需要返回再次进入,可能是缓存引起的问题";
+    return label;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 60;
 }
 
 - (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath
@@ -137,11 +147,8 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:NSStringFromClass([UITableViewCell class])];
     }
     NSString *text = [self.tableDataArr objectAtIndex:indexPath.row];
-    cell.textLabel.text =text;
-//    cell.textLabel.adjustsFontSizeToFitWidth = YES;
-//
-//    NSString *detail = [[NSUserDefaults standardUserDefaults] objectForKey:text];
-//    cell.detailTextLabel.text =@"22";
+    cell.textLabel.text =text?:@"";
+    cell.textLabel.adjustsFontSizeToFitWidth = YES;
     return cell;
 }
 
@@ -149,30 +156,22 @@
 {
     //找到字符串
     NSString *key =[self.tableDataArr objectAtIndex:indexPath.row];
-    NSObject *value = [_userDefaultDic objectForKey:key];
-//
-//        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:value.description delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-//        [alert show];
+    NSObject *value = [[NSUserDefaults standardUserDefaults] objectForKey:key];
     
-    //    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:key delegate:nil cancelButtonTitle:@"取消" destructiveButtonTitle:@"重置" otherButtonTitles:@"修改", nil];
-    //
-    //    [sheet showInView:self.view];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:key message:value.description preferredStyle:UIAlertControllerStyleActionSheet];
     
-    
-    UIAlertController *spAlertVC = [UIAlertController alertControllerWithTitle:key message:value.description preferredStyle:UIAlertControllerStyleActionSheet];
-    
-    UIAlertAction *resetAction = [UIAlertAction actionWithTitle:@"重置" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *resetAction = [UIAlertAction actionWithTitle:SP_LANGUAGE_IS_EN ? @"Reset" : @"重置" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:key message:@"你想要重置当前key的值吗" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:key message:SP_LANGUAGE_IS_EN ? @"Do you want remove the Key-Value" : @"你想要移除当前键值对吗" delegate:self cancelButtonTitle:SP_LANGUAGE_IS_EN ? @"Cancel" : @"取消" otherButtonTitles:SP_LANGUAGE_IS_EN ? @"OK" : @"确定", nil];
         alert.tag = 102;
         [alert show];
         
     }];
-    [spAlertVC addAction:resetAction];
+    [alertVC addAction:resetAction];
     
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"修改" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:SP_LANGUAGE_IS_EN ? @"Alter" : @"修改" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:key message:@"修改值" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:key message:SP_LANGUAGE_IS_EN ? @"Input the Value" : @"请输入要设置的值" delegate:self cancelButtonTitle:SP_LANGUAGE_IS_EN ? @"Cancel" : @"取消" otherButtonTitles:SP_LANGUAGE_IS_EN ? @"OK" : @"确定", nil];
         alert.tag = 103;
         [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
         UITextField *valueField = [alert textFieldAtIndex:0];
@@ -182,24 +181,31 @@
         [alert show];
         
     }];
-    [spAlertVC addAction:okAction];
+    [alertVC addAction:okAction];
     
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:SP_LANGUAGE_IS_EN ? @"Cancel" : @"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
     }];
-    [spAlertVC addAction:cancelAction];
+    [alertVC addAction:cancelAction];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self presentViewController:spAlertVC animated:YES completion:nil];
+        [self presentViewController:alertVC animated:YES completion:nil];
     });
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 160;
+#pragma mark - add new key-Value
+-(void)add
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:SP_LANGUAGE_IS_EN ? @"Add key-Value" : @"添加一个键值对" message:nil delegate:self cancelButtonTitle:SP_LANGUAGE_IS_EN ? @"Cancel" : @"取消" otherButtonTitles:SP_LANGUAGE_IS_EN ? @"OK" : @"确定", nil];
+    alert.tag = 101;
+    [alert setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
+    [alert textFieldAtIndex:0].placeholder =@"key";
+    [alert textFieldAtIndex:1].placeholder =@"value";
+    [alert textFieldAtIndex:1].secureTextEntry = NO;
+    [alert show];
 }
 
 #pragma mark - alertview delegate
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     //添加
     if (alertView.tag==101) {
@@ -215,7 +221,6 @@
     //重置
     else if (alertView.tag==102)
     {
-        //确认清除后添加的
         if (buttonIndex==1&&alertView.title.length>0)
         {
             [[NSUserDefaults standardUserDefaults] removeObjectForKey:alertView.title];

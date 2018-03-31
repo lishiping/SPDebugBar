@@ -15,7 +15,7 @@
 //github address//https://github.com/lishiping/SPCategory
 //github address//https://github.com/lishiping/SPBaseClass
 
-
+//v1.0.0正式版加入自定义调试功能
 /**
  Set up the environment,help developers and testers switch server address in the debug mode or the test package,debug the program
  
@@ -107,23 +107,28 @@
 #import <UIKit/UIKit.h>
 #import "SPServerListVC.h"
 
-typedef void (^SPArrayResultBlock)(NSArray* objects, NSError* error);
-
 @interface SPDebugBar : UIWindow
 
 /**
  Singleton, debugbar of default on the top right corner
  Singleton单例，调试条默认放在右上角
  @param serverArray      Given the address of the server list(给定服务器地址列表)
- @param selectArrayBlock Returns the selected server address, the first array element is given the address of the server are to be selected the first set of array elements, the second for a given inside the second group is selected in the address of the server, and so on
+ @param selectedServerArrayBlock Returns the selected server address, the first array element is given the address of the server are to be selected the first set of array elements, the second for a given inside the second group is selected in the address of the server, and so on
  (返回选中的服务器地址，数组元素的第一个是给定的服务器地址第一组里面被选中的，数组元素第二个为给定服务器地址中第二组里面被选中的，以此类推)，error返回错误原因，给定地址有错误
  */
-+ (id)sharedInstanceWithServerArray:(NSArray*)serverArray  SelectArrayBlock:(SPArrayResultBlock)selectArrayBlock;
++ (id)sharedInstanceWithServerArray:(NSArray*)serverArray
+           selectedServerArrayBlock:(SPArrayResultBlock)selectedServerArrayBlock
+                  otherSectionArray:(NSArray *)otherSectionArray
+             otherSectionArrayBlock:(SPStringResultBlock)otherSectionArrayBlock;
 
 /**
  Singleton, the method can custom debugbar of the position
  singleton单例，该方法可以自定义调试条的位置
  */
-+ (id)sharedInstanceWithFrame:(CGRect)frame ServerArray:(NSArray*)serverArray  SelectArrayBlock:(SPArrayResultBlock)selectArrayBlock;
++ (id)sharedInstanceWithFrame:(CGRect)frame
+                  ServerArray:(NSArray*)serverArray
+     selectedServerArrayBlock:(SPArrayResultBlock)selectedServerArrayBlock
+            otherSectionArray:(NSArray *)otherSectionArray
+       otherSectionArrayBlock:(SPStringResultBlock)otherSectionArrayBlock;
 
 @end

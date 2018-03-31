@@ -16,18 +16,17 @@
 //github address//https://github.com/lishiping/SPBaseClass
 
 #import <UIKit/UIKit.h>
-#import "SPServerBaseVC.h"
+#import "SPDebugBaseVC.h"
 
 #define SP_GIVENSERVERLIST @"SPGivenServerList"//给定的服务器地址缓存
 #define SP_ALLSERVERLIST @"SPAllServerList"//所有服务器地址缓存
 #define SP_SELECTSERVERLIST @"SPSelectServerList"//选择的服务器地址缓存
 
 #define SP_TITLE_KEY @"title"//服务器列表每组的名称键值
-#define SP_SERVERLIST_KEY @"server_address"//服务器列表数组每组的键值
+#define SP_ARRAY_KEY @"array"//服务器列表数组每组的键值
 
-typedef void (^NSArrayResultBlock)(NSArray* array);
 
-@interface SPServerListVC : SPServerBaseVC
+@interface SPServerListVC : SPDebugBaseVC
 
 @property(nonatomic,copy)NSArrayResultBlock selectServerArrayBlock;//选择地址后回调
 @property (strong, nonatomic) NSArray *tempserverArr;//给定的服务器地址数组

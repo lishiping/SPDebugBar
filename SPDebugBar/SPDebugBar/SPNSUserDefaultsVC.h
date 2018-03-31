@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SPServerBaseVC.h"
+#import "SPDebugBaseVC.h"
 
-@interface SPNSUserDefaultsVC : UIViewController
+@interface SPNSUserDefaultsVC : SPDebugBaseVC
 
 @end
