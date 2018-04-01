@@ -15,7 +15,7 @@
 //github address//https://github.com/lishiping/SPCategory
 //github address//https://github.com/lishiping/SPBaseClass
 
-#define SP_LANGUAGE_IS_EN         [[[NSLocale preferredLanguages] objectAtIndex:0] isEqualToString:@"en"]
+#define SP_LANGUAGE_IS_CHINESE         [[[NSLocale preferredLanguages] objectAtIndex:0] isEqualToString:@"zh-Hans-US"]
 
 
 #import <UIKit/UIKit.h>

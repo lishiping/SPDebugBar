@@ -25,7 +25,7 @@
 {
     [super viewDidLoad];
     
-    self.title = SP_LANGUAGE_IS_EN ? @"Server Table" : @"服务器列表";
+    self.title = SP_LANGUAGE_IS_CHINESE? @"服务器列表":@"Server Table" ;
     
     [self.view addSubview:self.tableView];
     
@@ -143,11 +143,11 @@
 -(void)addButtonItem
 {    
     //确定按钮
-    UIBarButtonItem *OKItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_EN ? @"OK" : @"确定" style:UIBarButtonItemStylePlain target:self action:@selector(confirm)];
+    UIBarButtonItem *OKItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_CHINESE? @"确定":@"OK" style:UIBarButtonItemStylePlain target:self action:@selector(confirm)];
     
     
     //清除按钮
-    UIBarButtonItem *cleanItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_EN ? @"Clean" : @"清除" style:UIBarButtonItemStylePlain target:self action:@selector(cleanUserDefault)];
+    UIBarButtonItem *cleanItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_CHINESE? @"清除":@"Clean" style:UIBarButtonItemStylePlain target:self action:@selector(cleanUserDefault)];
     
     NSArray *oldGivenArr = [[NSUserDefaults standardUserDefaults] objectForKey:SP_GIVENSERVERLIST];
     NSArray *oldAllArr = [[NSUserDefaults standardUserDefaults] objectForKey:SP_ALLSERVERLIST];
@@ -165,7 +165,7 @@
 
 -(void)cleanUserDefault
 {
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:SP_LANGUAGE_IS_EN ? @"Do you want to remove the local manually enter additional service address?Remove address list after back to the given address list" : @"你想要移除本地手动添加的额外地址吗？移除之后恢复成初始化给定的列表" delegate:self cancelButtonTitle:SP_LANGUAGE_IS_EN ? @"Cancel" : @"取消" otherButtonTitles:SP_LANGUAGE_IS_EN ? @"OK" : @"确定", nil];
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:SP_LANGUAGE_IS_CHINESE? @"你想要移除本地手动添加的额外地址吗？移除之后恢复成初始化给定的列表":@"Do you want to remove the local manually enter additional service address?Remove address list after back to the given address list" delegate:self cancelButtonTitle:SP_LANGUAGE_IS_CHINESE? @"取消":@"Cancel" otherButtonTitles:SP_LANGUAGE_IS_CHINESE?@"确定":@"OK", nil];
     [alert show];
 }
 
@@ -336,14 +336,14 @@
     }
     else
     {
-        headLabel.text =SP_LANGUAGE_IS_EN ? [NSString stringWithFormat:@"The %ld section of the selected address",(long)section+1] : [NSString stringWithFormat:@"第 %ld 组选中的地址",(long)section+1] ;
+        headLabel.text =SP_LANGUAGE_IS_CHINESE ?[NSString stringWithFormat:@"第 %ld 组选中的地址",(long)section+1]:[NSString stringWithFormat:@"The %ld section of the selected address",(long)section+1];
     }
     
     UITextField *headTextField = [[UITextField alloc] initWithFrame:CGRectMake(10, 25, CGRectGetWidth(tableView.frame)-10, 35)];
     headTextField.tag = section+200;
     headTextField.textColor = [UIColor redColor];
     headTextField.textAlignment = NSTextAlignmentLeft;
-    headTextField.placeholder =SP_LANGUAGE_IS_EN ? @"Input URL!!" : @"输入地址";
+    headTextField.placeholder =SP_LANGUAGE_IS_CHINESE ?@"输入地址":@"Input URL!!";
     headTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
     headTextField.text = [self.selectMArr objectAtIndex:section];
     headTextField.adjustsFontSizeToFitWidth = YES;
@@ -414,7 +414,7 @@
     }
     else
     {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:SP_LANGUAGE_IS_EN ? @"The address of the server can't be empty, please re-enter" : @"输入的地址不能为空，请重新输入" delegate:nil cancelButtonTitle:SP_LANGUAGE_IS_EN ? @"OK" : @"确定" otherButtonTitles:nil, nil];
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:SP_LANGUAGE_IS_CHINESE ?@"输入的地址不能为空，请重新输入":@"The address of the server can't be empty, please re-enter" delegate:nil cancelButtonTitle:SP_LANGUAGE_IS_CHINESE ?@"确定":@"OK" otherButtonTitles:nil, nil];
         [alert show];
     }
 }

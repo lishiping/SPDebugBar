@@ -19,7 +19,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = SP_LANGUAGE_IS_EN? @"Debug Tool": @"调试工具栏";
+    self.title = SP_LANGUAGE_IS_CHINESE? @"调试工具栏":@"Debug Tool";
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.tableView];
 }

@@ -21,7 +21,7 @@
 #pragma mark - life cycle
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = SP_LANGUAGE_IS_EN ? @"Allkeys of NSUserDefaults" : @"NSUserDefaults的key列表";
+    self.title = SP_LANGUAGE_IS_CHINESE ?@"NSUserDefaults的key列表":@"Allkeys of NSUserDefaults";
     self.view.backgroundColor = [UIColor whiteColor];
     [self addButtonItem];
     [self.view addSubview:self.tableView];
@@ -37,7 +37,7 @@
 -(void)addButtonItem
 {
     //添加按钮
-    UIBarButtonItem *addItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_EN ? @"Add" : @"添加" style:UIBarButtonItemStylePlain target:self action:@selector(add)];
+    UIBarButtonItem *addItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_CHINESE ?@"添加":@"Add" style:UIBarButtonItemStylePlain target:self action:@selector(add)];
     
     [self.navigationItem setRightBarButtonItems:@[addItem]];
 }
@@ -160,18 +160,18 @@
     
     UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:key message:value.description preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIAlertAction *resetAction = [UIAlertAction actionWithTitle:SP_LANGUAGE_IS_EN ? @"Reset" : @"重置" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *resetAction = [UIAlertAction actionWithTitle:SP_LANGUAGE_IS_CHINESE ?@"重置":@"Reset" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:key message:SP_LANGUAGE_IS_EN ? @"Do you want remove the Key-Value" : @"你想要移除当前键值对吗" delegate:self cancelButtonTitle:SP_LANGUAGE_IS_EN ? @"Cancel" : @"取消" otherButtonTitles:SP_LANGUAGE_IS_EN ? @"OK" : @"确定", nil];
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:key message:SP_LANGUAGE_IS_CHINESE ?@"你想要移除当前键值对吗":@"Do you want remove the Key-Value" delegate:self cancelButtonTitle:SP_LANGUAGE_IS_CHINESE ?@"取消": @"Cancel" otherButtonTitles:SP_LANGUAGE_IS_CHINESE ?@"确定": @"OK", nil];
         alert.tag = 102;
         [alert show];
         
     }];
     [alertVC addAction:resetAction];
     
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:SP_LANGUAGE_IS_EN ? @"Alter" : @"修改" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:SP_LANGUAGE_IS_CHINESE ?@"修改": @"Alter" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:key message:SP_LANGUAGE_IS_EN ? @"Input the Value" : @"请输入要设置的值" delegate:self cancelButtonTitle:SP_LANGUAGE_IS_EN ? @"Cancel" : @"取消" otherButtonTitles:SP_LANGUAGE_IS_EN ? @"OK" : @"确定", nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:key message:SP_LANGUAGE_IS_CHINESE ?@"请输入要设置的值": @"Input the Value" delegate:self cancelButtonTitle:SP_LANGUAGE_IS_CHINESE ?@"取消": @"Cancel" otherButtonTitles:SP_LANGUAGE_IS_CHINESE ?@"确定": @"OK", nil];
         alert.tag = 103;
         [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
         UITextField *valueField = [alert textFieldAtIndex:0];
@@ -183,7 +183,7 @@
     }];
     [alertVC addAction:okAction];
     
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:SP_LANGUAGE_IS_EN ? @"Cancel" : @"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:SP_LANGUAGE_IS_CHINESE ?@"取消": @"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
     }];
     [alertVC addAction:cancelAction];
     
@@ -195,7 +195,7 @@
 #pragma mark - add new key-Value
 -(void)add
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:SP_LANGUAGE_IS_EN ? @"Add key-Value" : @"添加一个键值对" message:nil delegate:self cancelButtonTitle:SP_LANGUAGE_IS_EN ? @"Cancel" : @"取消" otherButtonTitles:SP_LANGUAGE_IS_EN ? @"OK" : @"确定", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:SP_LANGUAGE_IS_CHINESE ?@"添加一个键值对": @"Add key-Value" message:nil delegate:self cancelButtonTitle:SP_LANGUAGE_IS_CHINESE ?@"取消": @"Cancel" otherButtonTitles:SP_LANGUAGE_IS_CHINESE ?@"确定": @"OK", nil];
     alert.tag = 101;
     [alert setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
     [alert textFieldAtIndex:0].placeholder =@"key";

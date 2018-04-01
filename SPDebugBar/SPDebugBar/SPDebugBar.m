@@ -11,8 +11,8 @@
 #import "SPServerListVC.h"
 #import "SPNSUserDefaultsVC.h"
 
-#define SP_ChangeAddress_KEY @"切换服务器"
-#define SP_ChangeNSUserDefaults_KEY @"修改NSUserDefaults"//服务器列表每组的名称键值
+#define SP_ChangeAddress_KEY SP_LANGUAGE_IS_CHINESE? @"切换服务器" : @"Change Server"
+#define SP_ChangeNSUserDefaults_KEY SP_LANGUAGE_IS_CHINESE? @"修改NSUserDefaults":@"Change NSUserDefaults"//服务器列表每组的名称键值
 
 
 @interface SPDebugBar ()
@@ -238,7 +238,6 @@ static SPDebugBar* instance = nil;
 {
     self.serverArray = serverArray;
     self.selectedServerArrayBlock = selectedServerArrayBlock;
-    
     //检查服务器地址数组是否合法
     if ([SPServerListVC checkArray:serverArray]) {
         //服务器地址合法返回本地缓存选择过得地址，没有选择过得地址，默认选择每一组的第一个作为该组的选中地址

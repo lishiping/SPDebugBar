@@ -19,17 +19,17 @@
     
     if (self.navigationController.viewControllers.count>1) {
         //返回按钮
-        UIBarButtonItem *backlItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_EN ? @"Back" : @"返回" style:UIBarButtonItemStylePlain target:self action:@selector(back)];
+        UIBarButtonItem *backlItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_CHINESE? @"返回":@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(back)];
         
         //关闭按钮
-        UIBarButtonItem *closeItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_EN ? @"Close" : @"关闭" style:UIBarButtonItemStylePlain target:self action:@selector(dismiss)];
+        UIBarButtonItem *closeItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_CHINESE? @"关闭":@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(dismiss)];
         
         [self.navigationItem setLeftBarButtonItems:@[backlItem,closeItem]];
     }
     else
     {
         //关闭按钮
-        UIBarButtonItem *closeItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_EN ? @"Close" : @"关闭" style:UIBarButtonItemStylePlain target:self action:@selector(dismiss)];
+        UIBarButtonItem *closeItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_CHINESE? @"关闭":@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(dismiss)];
         
         [self.navigationItem setLeftBarButtonItems:@[closeItem]];
     }
@@ -52,7 +52,7 @@
     //author
     UILabel *authorLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 250, width, 30)];
     authorLabel.textColor = [UIColor darkGrayColor];
-    authorLabel.text = SP_LANGUAGE_IS_EN ? @"Author:lishiping e-mail:83118274@qq.com" : @"作者:李世平 邮箱:83118274@qq.com";
+    authorLabel.text = SP_LANGUAGE_IS_CHINESE? @"作者:李世平 邮箱:83118274@qq.com":@"Author:lishiping e-mail:83118274@qq.com";
     [authorLabel setFont:[UIFont systemFontOfSize:12]];
     authorLabel.textAlignment = NSTextAlignmentCenter;
     [tableFooterView addSubview:authorLabel];
