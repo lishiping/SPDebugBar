@@ -14,7 +14,6 @@
 #define SP_ChangeAddress_KEY SP_LANGUAGE_IS_CHINESE? @"切换服务器" : @"Change Server"
 #define SP_ChangeNSUserDefaults_KEY SP_LANGUAGE_IS_CHINESE? @"修改NSUserDefaults":@"Change NSUserDefaults"//服务器列表每组的名称键值
 
-
 @interface SPDebugBar ()
 
 @property (strong, nonatomic) UILabel* tipLabel;//显示标签
@@ -24,7 +23,7 @@
 @property (assign, nonatomic) NSUInteger isStartWarningNum;
 
 @property (strong, nonatomic) NSArray *otherSectionArray;//调试工具自定义传进来的数组名字列表
-@property (copy, nonatomic) SPStringResultBlock otherSectionArrayBlock; //调试工具自定义传进来的数组名字列表回调
+@property (copy, nonatomic) SPNavigationStringErrorBlock otherSectionArrayBlock; //调试工具自定义传进来的数组名字列表回调
 
 
 /****0.2.0加入刷新fps使用的****/
@@ -44,7 +43,7 @@ static SPDebugBar* instance = nil;
 + (id)sharedInstanceWithServerArray:(NSArray*)serverArray
            selectedServerArrayBlock:(SPArrayResultBlock)selectedServerArrayBlock
                   otherSectionArray:(NSArray *)otherSectionArray
-             otherSectionArrayBlock:(SPStringResultBlock)otherSectionArrayBlock
+             otherSectionArrayBlock:(SPNavigationStringErrorBlock)otherSectionArrayBlock
 {
     CGRect frame = CGRectMake(CGRectGetWidth([UIScreen mainScreen].bounds)-250, 0, 250, 20);
     return [self sharedInstanceWithFrame:frame ServerArray:serverArray selectedServerArrayBlock:selectedServerArrayBlock otherSectionArray:otherSectionArray otherSectionArrayBlock:otherSectionArrayBlock];
@@ -54,7 +53,7 @@ static SPDebugBar* instance = nil;
                   ServerArray:(NSArray*)serverArray
      selectedServerArrayBlock:(SPArrayResultBlock)selectedServerArrayBlock
             otherSectionArray:(NSArray *)otherSectionArray
-       otherSectionArrayBlock:(SPStringResultBlock)otherSectionArrayBlock
+       otherSectionArrayBlock:(SPNavigationStringErrorBlock)otherSectionArrayBlock
 {
     SPDebugBar *sharedInstance =  [[self class] sharedInstanceWithFrame:frame];
     [sharedInstance configServerArray:serverArray selectedServerArrayBlock:selectedServerArrayBlock];
@@ -62,8 +61,6 @@ static SPDebugBar* instance = nil;
     sharedInstance.otherSectionArrayBlock = otherSectionArrayBlock;
     return sharedInstance;
 }
-
-
 
 #pragma mark - init
 
@@ -149,7 +146,6 @@ static SPDebugBar* instance = nil;
     
     _tipLabel.text = [NSString stringWithFormat:@"%@ %@ %@", cpuInfo,fpsInfo,memoryInfo];
 }
-
 
 //收到内存警告，启动动画
 - (void)didReceiveMemoryWarningTip:(NSNotification*)noti
@@ -251,7 +247,7 @@ static SPDebugBar* instance = nil;
     {
         //如果地址不合法，返回错误信息
         if (self.selectedServerArrayBlock) {
-            self.selectedServerArrayBlock(nil,[NSError errorWithDomain:@"url is illegal，url must Be NSString" code:-2 userInfo:nil]);
+            self.selectedServerArrayBlock(nil,[NSError errorWithDomain:SP_LANGUAGE_IS_CHINESE? @"url必须是字符串类型" : @"url is illegal，url must Be NSString" code:-2 userInfo:nil]);
             self.selectedServerArrayBlock = nil;
         }
     }
@@ -275,6 +271,8 @@ static SPDebugBar* instance = nil;
                          SP_TITLE_KEY:@"第三方自带功能(不断更新中)",
                          SP_ARRAY_KEY: @[SP_ChangeAddress_KEY,SP_ChangeNSUserDefaults_KEY]};
     NSMutableArray *marr = [NSMutableArray arrayWithObject:dic];
+    
+    //调试工具栏头部留给自带功能
     [marr addObjectsFromArray:self.otherSectionArray];
     
     debugVC.tableArr = marr;
@@ -282,6 +280,7 @@ static SPDebugBar* instance = nil;
     UINavigationController* navigationController = [[UINavigationController alloc] initWithRootViewController:debugVC];
     [rootVC presentViewController:navigationController animated:NO completion:nil];
 
+    //tableview点击回调
     debugVC.tableBlock = ^(NSIndexPath *indexPath)
     {
         NSDictionary *dic = [marr objectAtIndex:indexPath.section];
@@ -294,14 +293,7 @@ static SPDebugBar* instance = nil;
             //弹出配置页面
             SPServerListVC* serverListVC = [[SPServerListVC alloc] init];
             serverListVC.tempserverArr =self.serverArray;
-            
-            __weak __typeof(self) weakSelf = self;
-            serverListVC.selectServerArrayBlock = ^(NSArray *array){
-                __strong __typeof(weakSelf) strongSelf = weakSelf;
-                if (strongSelf.selectedServerArrayBlock && array.count>0) {
-                    strongSelf.selectedServerArrayBlock(array,nil);
-                }
-            };
+            serverListVC.selectServerArrayBlock = self.selectedServerArrayBlock;
             [navigationController pushViewController:serverListVC animated:YES];
         }
         //自带更改NSUserDefaults功能
@@ -314,7 +306,12 @@ static SPDebugBar* instance = nil;
         {
             if (self.otherSectionArrayBlock)
             {
-                self.otherSectionArrayBlock(navigationController,string, nil);
+                if (string.length>0 && navigationController) {
+                    self.otherSectionArrayBlock(navigationController,string, nil);
+                }else
+                {
+                    self.otherSectionArrayBlock(navigationController,string, [NSError errorWithDomain:@"字符串为空" code:-2 userInfo:nil]);
+                }
             }
         }
     };

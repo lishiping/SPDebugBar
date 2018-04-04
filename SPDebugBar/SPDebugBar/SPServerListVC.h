@@ -22,13 +22,9 @@
 #define SP_ALLSERVERLIST @"SPAllServerList"//所有服务器地址缓存
 #define SP_SELECTSERVERLIST @"SPSelectServerList"//选择的服务器地址缓存
 
-#define SP_TITLE_KEY @"title"//服务器列表每组的名称键值
-#define SP_ARRAY_KEY @"array"//服务器列表数组每组的键值
-
-
 @interface SPServerListVC : SPDebugBaseVC
 
-@property(nonatomic,copy)NSArrayResultBlock selectServerArrayBlock;//选择地址后回调
+@property(nonatomic,copy)SPArrayResultBlock selectServerArrayBlock;//选择地址后回调
 @property (strong, nonatomic) NSArray *tempserverArr;//给定的服务器地址数组
 
 

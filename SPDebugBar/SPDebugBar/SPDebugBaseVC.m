@@ -14,10 +14,17 @@
 
 @implementation SPDebugBaseVC
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
-    if (self.navigationController.viewControllers.count>1) {
+    [self setBaseBarButtonItem];
+}
+
+-(void)setBaseBarButtonItem
+{
+    if (self.navigationController.viewControllers.count>1)
+    {
         //返回按钮
         UIBarButtonItem *backlItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_CHINESE? @"返回":@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(back)];
         

@@ -40,7 +40,6 @@
         [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:
          NSStringFromClass([UITableViewCell class])];
         
-        //使用父类视图
         _tableView.tableFooterView = self.class.tableFooterView;
     }
     return _tableView;

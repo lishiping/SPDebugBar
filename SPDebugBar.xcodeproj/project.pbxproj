@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1EAA41632052801E005BA1D0 /* SPDebugVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAA41622052801E005BA1D0 /* SPDebugVC.m */; };
 		1EAA416620529879005BA1D0 /* SPNSUserDefaultsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAA416520529879005BA1D0 /* SPNSUserDefaultsVC.m */; };
+		1ED8812A2074EBBD00491EEC /* ABTestVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED881292074EBBC00491EEC /* ABTestVC.m */; };
 		E15C00B81E1D0A5700E0219B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E15C00B71E1D0A5700E0219B /* main.m */; };
 		E15C00BB1E1D0A5700E0219B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E15C00BA1E1D0A5700E0219B /* AppDelegate.m */; };
 		E15C00BE1E1D0A5700E0219B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E15C00BD1E1D0A5700E0219B /* ViewController.m */; };
@@ -26,6 +27,8 @@
 		1EAA41622052801E005BA1D0 /* SPDebugVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SPDebugVC.m; sourceTree = "<group>"; };
 		1EAA416420529879005BA1D0 /* SPNSUserDefaultsVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SPNSUserDefaultsVC.h; sourceTree = "<group>"; };
 		1EAA416520529879005BA1D0 /* SPNSUserDefaultsVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SPNSUserDefaultsVC.m; sourceTree = "<group>"; };
+		1ED881282074EBBC00491EEC /* ABTestVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABTestVC.h; sourceTree = "<group>"; };
+		1ED881292074EBBC00491EEC /* ABTestVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ABTestVC.m; sourceTree = "<group>"; };
 		E15C00B31E1D0A5700E0219B /* SPDebugBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SPDebugBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E15C00B71E1D0A5700E0219B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E15C00B91E1D0A5700E0219B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -81,6 +84,8 @@
 				E15C00BA1E1D0A5700E0219B /* AppDelegate.m */,
 				E15C00BC1E1D0A5700E0219B /* ViewController.h */,
 				E15C00BD1E1D0A5700E0219B /* ViewController.m */,
+				1ED881282074EBBC00491EEC /* ABTestVC.h */,
+				1ED881292074EBBC00491EEC /* ABTestVC.m */,
 				E15C00BF1E1D0A5700E0219B /* Main.storyboard */,
 				E15C00C21E1D0A5700E0219B /* Assets.xcassets */,
 				E15C00C41E1D0A5700E0219B /* LaunchScreen.storyboard */,
@@ -148,7 +153,6 @@
 				TargetAttributes = {
 					E15C00B21E1D0A5700E0219B = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = 24GAHA6XL7;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -190,6 +194,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1EAA416620529879005BA1D0 /* SPNSUserDefaultsVC.m in Sources */,
+				1ED8812A2074EBBD00491EEC /* ABTestVC.m in Sources */,
 				E15C00BE1E1D0A5700E0219B /* ViewController.m in Sources */,
 				1EAA41632052801E005BA1D0 /* SPDebugVC.m in Sources */,
 				E15C00DB1E1D0AAF00E0219B /* SPServerListVC.m in Sources */,
@@ -263,7 +268,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -304,7 +309,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -316,11 +321,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 24GAHA6XL7;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = SPDebugBar/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.36kr.SPDebugBar;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lishiping.SPDebugBar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -331,11 +336,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 24GAHA6XL7;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = SPDebugBar/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.36kr.SPDebugBar;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lishiping.SPDebugBar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

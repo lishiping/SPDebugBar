@@ -14,6 +14,5 @@
 
 @property (assign, nonatomic) BOOL TEST;
 
-
 @end
 

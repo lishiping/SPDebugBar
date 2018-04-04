@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "SPDebugBar.h"
 #import "ViewController.h"
+#import "ABTestVC.h"
 
 @interface AppDelegate ()
 
@@ -24,7 +25,9 @@
     
     //获取系统配置的是否是测试包
     _TEST = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"TEST"];
-
+    //加载调试工具
+    [self loadDebugTool];
+    
     [application setStatusBarHidden:NO];
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
@@ -37,12 +40,10 @@
     
     [self.window makeKeyAndVisible];
     
-    //加载调试工具
-    [self loadDebugTool];
-    
     return YES;
 }
 
+//加载调试工具
 -(void)loadDebugTool
 {
     //当debug和打测试包的时候为了测试人员切换服务器调试，调试工具要显示，线上包的时候该调试工具不显示
@@ -99,9 +100,13 @@
             _topVC.firstLabel.text =[NSString stringWithFormat:@"百度服务器地址:%@",objects[0]];
             _topVC.secondLabel.text =[NSString stringWithFormat:@"百度网盘地址:%@",objects[1]];
             
-        } otherSectionArray:otherArray otherSectionArrayBlock:^(UINavigationController *vigationController,NSString *string, NSError *error) {
+        } otherSectionArray:otherArray otherSectionArrayBlock:^(UINavigationController *navigationController,NSString *string, NSError *error) {
             _topVC.thirdLabel.text =[NSString stringWithFormat:@"你点击了:%@",string];
             
+            ABTestVC *abTestVC = [[ABTestVC alloc] init];
+            abTestVC.title = string;
+            
+            [navigationController pushViewController:abTestVC animated:YES];
         }];
     }
     else

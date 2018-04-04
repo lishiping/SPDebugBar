@@ -179,7 +179,7 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
         
         if (self.selectServerArrayBlock) {
-            self.selectServerArrayBlock([self.selectMArr copy]);
+            self.selectServerArrayBlock([self.selectMArr copy],nil);
         }
     }
     

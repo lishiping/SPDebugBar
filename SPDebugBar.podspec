@@ -2,8 +2,8 @@
 Pod::Spec.new do |s|
 
   s.name         = "SPDebugBar"
-  s.version      = "0.9.0"
-  s.summary      = "Help switch server address in the debug,test package,And show CPU,Memory,FPS.设置环境,在debug或测试包上切换服务器地址,显示CPU,Memory,FPS"
+  s.version      = "1.0.0"
+  s.summary      = "Switch address,Modify NSUserDefaults,Show CPU,Memory,FPS.切换服务器地址,修改NSUserDefaults,显示CPU,内存,FPS"
 
 
   s.homepage     = "https://github.com/lishiping/SPDebugBar.git"
@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
 
   s.author             = { "lishiping" => "83118274@qq.com" }
 
-  s.ios.deployment_target = "6.0"
+  s.ios.deployment_target = "8.0"
 
   s.source       = { :git => "https://github.com/lishiping/SPDebugBar.git", :tag => s.version }
 
