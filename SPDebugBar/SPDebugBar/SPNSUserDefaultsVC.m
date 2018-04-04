@@ -55,11 +55,12 @@
 
 -(void)delayGetUserDefault
 {
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        _tableDataArr = [self.getUserDefaultDic allKeys];
+        weakSelf.tableDataArr = [weakSelf.getUserDefaultDic allKeys];
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-            [self.activityIndicatorView stopAnimating];
+            [weakSelf.tableView reloadData];
+            [weakSelf.activityIndicatorView stopAnimating];
         });
     });
 }
