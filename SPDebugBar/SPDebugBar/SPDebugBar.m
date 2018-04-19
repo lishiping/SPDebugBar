@@ -259,7 +259,7 @@ static SPDebugBar* instance = nil;
 {
     self.tipLabel.hidden= NO;
     
-    UIViewController *rootVC = [[UIApplication sharedApplication].delegate window].rootViewController;
+    UIViewController *rootVC = [[self class] mainWindow].rootViewController;
     if ([rootVC presentedViewController]) {
         return;
     }
@@ -317,5 +317,28 @@ static SPDebugBar* instance = nil;
     };
 }
 
++ (UIWindow*)mainWindow
+{
+    UIWindow *window = nil;
+    
+    UIApplication *app  = [UIApplication sharedApplication];
+    
+    if ([app.delegate respondsToSelector:@selector(window)]) {
+        window = [app.delegate window];
+    }
+    
+    if (!window) {
+        if ([app windows].count>0)
+        {
+            window = [[app windows] objectAtIndex:0];
+        }
+    }
+    
+    if (!window) {
+        window = [UIApplication sharedApplication].keyWindow;
+    }
+    
+    return window;
+}
 
 @end

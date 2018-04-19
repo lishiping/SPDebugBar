@@ -39,7 +39,9 @@
     //添加按钮
     UIBarButtonItem *addItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_CHINESE ?@"添加":@"Add" style:UIBarButtonItemStylePlain target:self action:@selector(add)];
     
-    [self.navigationItem setRightBarButtonItems:@[addItem]];
+    //输入按钮
+    UIBarButtonItem *inputItem  = [[UIBarButtonItem alloc] initWithTitle:SP_LANGUAGE_IS_CHINESE ?@"输入":@"InPut" style:UIBarButtonItemStylePlain target:self action:@selector(inputKey)];
+    [self.navigationItem setRightBarButtonItems:@[addItem,inputItem]];
 }
 
 -(void)refreshData
@@ -129,16 +131,28 @@
 
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UILabel *label = [[UILabel alloc] init];
-    label.textColor = [UIColor redColor];
-    label.numberOfLines = 2;
-    label.text = @"注意，添加或删除刷新后有时候并不能马上显示在列表上，需要返回再次进入,可能是缓存引起的问题";
-    return label;
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 100)];
+    
+    UILabel *label1 = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, tableView.frame.size.width-40, 50)];
+    label1.textColor = [UIColor redColor];
+    label1.numberOfLines = 5;
+    label1.font = [UIFont systemFontOfSize:12];
+    label1.text = @"1.在开发测试过程中，有些UserDefault数据是为了标记用的，要想再次测试只能删除APP，本组件优点是在不删除APP的情况下，修改和重置UserDefault数据";
+    [view addSubview:label1];
+    
+    UILabel *label2 = [[UILabel alloc] initWithFrame:CGRectMake(20, 50, tableView.frame.size.width-40, 50)];
+    label2.textColor = [UIColor redColor];
+    label2.numberOfLines = 5;
+    label2.font = [UIFont systemFontOfSize:12];
+    label2.text = @"2.注意，添加或删除刷新后有时候并不能马上显示在列表上，需要返回再次进入,可能是缓存引起的问题";
+    [view addSubview:label2];
+    
+    return view;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 60;
+    return 100;
 }
 
 - (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath
@@ -166,7 +180,6 @@
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:key message:SP_LANGUAGE_IS_CHINESE ?@"你想要移除当前键值对吗":@"Do you want remove the Key-Value" delegate:self cancelButtonTitle:SP_LANGUAGE_IS_CHINESE ?@"取消": @"Cancel" otherButtonTitles:SP_LANGUAGE_IS_CHINESE ?@"确定": @"OK", nil];
         alert.tag = 102;
         [alert show];
-        
     }];
     [alertVC addAction:resetAction];
     
@@ -205,6 +218,15 @@
     [alert show];
 }
 
+-(void)inputKey
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:SP_LANGUAGE_IS_CHINESE ?@"输入键名称": @"Input key" message:SP_LANGUAGE_IS_CHINESE ?@"移除输入键名的键值对": @"remove key-value" delegate:self cancelButtonTitle:SP_LANGUAGE_IS_CHINESE ?@"取消": @"Cancel" otherButtonTitles:SP_LANGUAGE_IS_CHINESE ?@"确定": @"OK", nil];
+    alert.tag = 104;
+    [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
+    [alert textFieldAtIndex:0].placeholder =@"key";
+    [alert show];
+}
+
 #pragma mark - alertview delegate
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
@@ -213,7 +235,7 @@
         UITextField *key = [alertView textFieldAtIndex:0];
         UITextField *value = [alertView textFieldAtIndex:1];
         
-        if (key.text.length>0&&value.text.length>0) {
+        if (buttonIndex==1&&key.text.length>0&&value.text.length>0) {
             [[NSUserDefaults standardUserDefaults] setValue:value.text forKey:key.text];
             [[NSUserDefaults standardUserDefaults] synchronize];
             [self refreshData];
@@ -229,11 +251,22 @@
             [self refreshData];
         }
     }
+    //输入的重置
+    else if (alertView.tag==104)
+    {
+        UITextField *key = [alertView textFieldAtIndex:0];
+        if (buttonIndex==1&&key.text.length>0)
+        {
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:key.text];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            [self refreshData];
+        }
+    }
     //修改
     else if (alertView.tag==103)
     {
         UITextField *value = [alertView textFieldAtIndex:0];
-        if (alertView.title.length>0&&value.text.length>0) {
+        if (buttonIndex==1&&alertView.title.length>0&&value.text.length>0) {
             [[NSUserDefaults standardUserDefaults] setValue:value.text forKey:alertView.title];
             [[NSUserDefaults standardUserDefaults] synchronize];
             [self refreshData];
