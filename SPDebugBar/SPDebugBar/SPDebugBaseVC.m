@@ -59,7 +59,7 @@
     //author
     UILabel *authorLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 250, width, 30)];
     authorLabel.textColor = [UIColor darkGrayColor];
-    authorLabel.text = SP_LANGUAGE_IS_CHINESE? @"作者:李世平 邮箱:83118274@qq.com":@"Author:lishiping e-mail:83118274@qq.com";
+    authorLabel.text = SP_LANGUAGE_IS_CHINESE? @"作者:李世平 微信:lishiping83118274":@"Author:lishiping Wechat:lishiping83118274";
     [authorLabel setFont:[UIFont systemFontOfSize:12]];
     authorLabel.textAlignment = NSTextAlignmentCenter;
     [tableFooterView addSubview:authorLabel];

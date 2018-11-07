@@ -153,6 +153,7 @@
 				TargetAttributes = {
 					E15C00B21E1D0A5700E0219B = {
 						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 4LJ7AJCNLT;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -321,7 +322,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 4LJ7AJCNLT;
 				INFOPLIST_FILE = SPDebugBar/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -336,7 +337,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 4LJ7AJCNLT;
 				INFOPLIST_FILE = SPDebugBar/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

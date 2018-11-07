@@ -16,7 +16,7 @@
 //github address//https://github.com/lishiping/SPBaseClass
 
 //判断是否是简体中文环境
-#define SP_LANGUAGE_IS_CHINESE         [[[NSLocale preferredLanguages] objectAtIndex:0] isEqualToString:@"zh-Hans-US"]
+#define SP_LANGUAGE_IS_CHINESE         [[[NSLocale preferredLanguages] objectAtIndex:0] hasPrefix:@"zh-Hans"]
 
 #define SP_TITLE_KEY @"title"//服务器列表每组的名称键值
 #define SP_ARRAY_KEY @"array"//服务器列表数组每组的键值
