@@ -10,9 +10,11 @@
 #import "SPDebugVC.h"
 #import "SPServerListVC.h"
 #import "SPNSUserDefaultsVC.h"
+#import "LSPCleanVC.h"
 
 #define SP_ChangeAddress_KEY SP_LANGUAGE_IS_CHINESE? @"切换服务器" : @"Change Server"
 #define SP_ChangeNSUserDefaults_KEY SP_LANGUAGE_IS_CHINESE? @"修改NSUserDefaults":@"Change NSUserDefaults"//服务器列表每组的名称键值
+#define SP_Clean_KEY SP_LANGUAGE_IS_CHINESE? @"清理工具箱":@"Clean Box"
 
 @interface SPDebugBar ()
 
@@ -269,7 +271,7 @@ static SPDebugBar* instance = nil;
     
     NSDictionary *dic =@{
                          SP_TITLE_KEY:@"第三方自带功能(不断更新中)",
-                         SP_ARRAY_KEY: @[SP_ChangeAddress_KEY,SP_ChangeNSUserDefaults_KEY]};
+                         SP_ARRAY_KEY: @[SP_ChangeAddress_KEY,SP_ChangeNSUserDefaults_KEY,SP_Clean_KEY]};
     NSMutableArray *marr = [NSMutableArray arrayWithObject:dic];
     
     //调试工具栏头部留给自带功能
@@ -301,6 +303,12 @@ static SPDebugBar* instance = nil;
         {
             SPNSUserDefaultsVC *userDefaultsVC = [[SPNSUserDefaultsVC alloc] init];
             [navigationController pushViewController:userDefaultsVC animated:YES];
+        }
+        //清理工具箱功能
+        else if ([string isEqualToString:SP_Clean_KEY])
+        {
+            LSPCleanVC *cleanVC = [[LSPCleanVC alloc] init];
+            [navigationController pushViewController:cleanVC animated:YES];
         }
         else
         {

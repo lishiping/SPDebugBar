@@ -10,6 +10,7 @@
 		1EAA41632052801E005BA1D0 /* SPDebugVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAA41622052801E005BA1D0 /* SPDebugVC.m */; };
 		1EAA416620529879005BA1D0 /* SPNSUserDefaultsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAA416520529879005BA1D0 /* SPNSUserDefaultsVC.m */; };
 		1ED8812A2074EBBD00491EEC /* ABTestVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED881292074EBBC00491EEC /* ABTestVC.m */; };
+		92C1CC89240577AA009743D2 /* LSPCleanVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C1CC88240577A9009743D2 /* LSPCleanVC.m */; };
 		E15C00B81E1D0A5700E0219B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E15C00B71E1D0A5700E0219B /* main.m */; };
 		E15C00BB1E1D0A5700E0219B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E15C00BA1E1D0A5700E0219B /* AppDelegate.m */; };
 		E15C00BE1E1D0A5700E0219B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E15C00BD1E1D0A5700E0219B /* ViewController.m */; };
@@ -29,6 +30,8 @@
 		1EAA416520529879005BA1D0 /* SPNSUserDefaultsVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SPNSUserDefaultsVC.m; sourceTree = "<group>"; };
 		1ED881282074EBBC00491EEC /* ABTestVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABTestVC.h; sourceTree = "<group>"; };
 		1ED881292074EBBC00491EEC /* ABTestVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ABTestVC.m; sourceTree = "<group>"; };
+		92C1CC87240577A9009743D2 /* LSPCleanVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LSPCleanVC.h; sourceTree = "<group>"; };
+		92C1CC88240577A9009743D2 /* LSPCleanVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LSPCleanVC.m; sourceTree = "<group>"; };
 		E15C00B31E1D0A5700E0219B /* SPDebugBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SPDebugBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E15C00B71E1D0A5700E0219B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E15C00B91E1D0A5700E0219B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -118,6 +121,8 @@
 				E15C00D71E1D0AAF00E0219B /* UIDevice-SPHardware.m */,
 				1EAA416420529879005BA1D0 /* SPNSUserDefaultsVC.h */,
 				1EAA416520529879005BA1D0 /* SPNSUserDefaultsVC.m */,
+				92C1CC87240577A9009743D2 /* LSPCleanVC.h */,
+				92C1CC88240577A9009743D2 /* LSPCleanVC.m */,
 			);
 			path = SPDebugBar;
 			sourceTree = "<group>";
@@ -163,6 +168,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -196,6 +202,7 @@
 			files = (
 				1EAA416620529879005BA1D0 /* SPNSUserDefaultsVC.m in Sources */,
 				1ED8812A2074EBBD00491EEC /* ABTestVC.m in Sources */,
+				92C1CC89240577AA009743D2 /* LSPCleanVC.m in Sources */,
 				E15C00BE1E1D0A5700E0219B /* ViewController.m in Sources */,
 				1EAA41632052801E005BA1D0 /* SPDebugVC.m in Sources */,
 				E15C00DB1E1D0AAF00E0219B /* SPServerListVC.m in Sources */,

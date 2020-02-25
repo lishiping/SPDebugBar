@@ -79,26 +79,6 @@
     return tableFooterView;
 }
 
-//// 竖屏
-//- (BOOL)shouldAutorotate NS_AVAILABLE_IOS(6_0) __TVOS_PROHIBITED;
-//{
-//    return NO;
-//}
-//- (UIInterfaceOrientationMask)supportedInterfaceOrientations NS_AVAILABLE_IOS(6_0) __TVOS_PROHIBITED;
-//{
-//    return UIInterfaceOrientationMaskPortrait;
-//}
-//- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation NS_AVAILABLE_IOS(6_0) __TVOS_PROHIBITED;
-//{
-//    return UIInterfaceOrientationPortrait;
-//}
-//- (BOOL)prefersStatusBarHidden {
-//    return NO;
-//}
-//- (UIStatusBarStyle)preferredStatusBarStyle{
-//    return UIStatusBarStyleDefault;
-//}
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
