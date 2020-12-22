@@ -336,7 +336,8 @@
 #pragma mark memory information
 - (NSUInteger) totalMemoryBytes
 {
-    return [self getSysInfo:HW_PHYSMEM];
+//    return [self getSysInfo:HW_PHYSMEM];
+    return ([NSProcessInfo processInfo].physicalMemory);
 }
 
 - (NSUInteger) freeMemoryBytes 

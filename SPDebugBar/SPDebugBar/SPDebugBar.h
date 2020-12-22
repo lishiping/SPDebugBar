@@ -190,4 +190,9 @@
             otherSectionArray:(NSArray *)otherSectionArray
        otherSectionArrayBlock:(SPNavigationStringErrorBlock)otherSectionArrayBlock;
 
+
+/// 开始测试网址的延迟，双指单击工具条重新ping地址
+/// @param address 网址
++(void)startPingAddress:(NSString*)address;
+
 @end

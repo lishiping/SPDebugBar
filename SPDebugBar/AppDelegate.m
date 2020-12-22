@@ -108,6 +108,7 @@
             
             [navigationController pushViewController:abTestVC animated:YES];
         }];
+        [SPDebugBar startPingAddress:@"ccp.koolearn.com"];
     }
     else
     {

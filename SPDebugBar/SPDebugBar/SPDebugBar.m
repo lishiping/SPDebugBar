@@ -11,6 +11,9 @@
 #import "SPServerListVC.h"
 #import "SPNSUserDefaultsVC.h"
 #import "LSPCleanVC.h"
+#import "STDPingServices.h"
+#import "SPAppInfoHelper.h"
+#import "SPNetWorkReachability.h"
 
 #define SP_ChangeAddress_KEY SP_LANGUAGE_IS_CHINESE? @"切换服务器" : @"Change Server"
 #define SP_ChangeNSUserDefaults_KEY SP_LANGUAGE_IS_CHINESE? @"修改NSUserDefaults":@"Change NSUserDefaults"//服务器列表每组的名称键值
@@ -27,13 +30,9 @@
 @property (strong, nonatomic) NSArray *otherSectionArray;//调试工具自定义传进来的数组名字列表
 @property (copy, nonatomic) SPNavigationStringErrorBlock otherSectionArrayBlock; //调试工具自定义传进来的数组名字列表回调
 
-
-/****0.2.0加入刷新fps使用的****/
-@property (nonatomic, strong) CADisplayLink *displayLink;//更精确的计时器
-@property (nonatomic) int screenUpdatesCount;
-@property (nonatomic) CFTimeInterval screenUpdatesBeginTime;
-@property (nonatomic) CFTimeInterval averageScreenUpdatesTime;
-@property  NSUInteger fps;
+@property (atomic,copy)NSString *pingAddress;//ping地址
+@property (atomic,copy)NSString *pingString;//延迟时间,毫秒
+@property (nonatomic, strong) STDPingServices *pingService;
 
 @end
 
@@ -41,13 +40,13 @@
 
 #pragma mark - shareInstance
 static SPDebugBar* instance = nil;
-
+static STDPingServices *pingService = nil;
 + (id)sharedInstanceWithServerArray:(NSArray*)serverArray
            selectedServerArrayBlock:(SPArrayResultBlock)selectedServerArrayBlock
                   otherSectionArray:(NSArray *)otherSectionArray
              otherSectionArrayBlock:(SPNavigationStringErrorBlock)otherSectionArrayBlock
 {
-    CGRect frame = CGRectMake(CGRectGetWidth([UIScreen mainScreen].bounds)-250, 0, 250, 20);
+    CGRect frame = CGRectMake(0, 33, [UIScreen mainScreen].bounds.size.width, 20);
     return [self sharedInstanceWithFrame:frame ServerArray:serverArray selectedServerArrayBlock:selectedServerArrayBlock otherSectionArray:otherSectionArray otherSectionArrayBlock:otherSectionArrayBlock];
 }
 
@@ -62,6 +61,15 @@ static SPDebugBar* instance = nil;
     sharedInstance.otherSectionArray = otherSectionArray;
     sharedInstance.otherSectionArrayBlock = otherSectionArrayBlock;
     return sharedInstance;
+}
+
++(void)startPingAddress:(NSString *)address
+{
+    if (!instance || address.length == 0) {
+        return;
+    }
+    instance.pingAddress = address;
+    [instance startPing];
 }
 
 #pragma mark - init
@@ -80,18 +88,19 @@ static SPDebugBar* instance = nil;
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
         [self initialize];
     }
     return self;
 }
 
+-(void)dealloc
+{
+    [self unregisterLLAppInfoHelperNotification];
+}
 -(void)initialize
 {
+    _pingString = @"not Start";
     _isStartWarningNum =0;
-    _screenUpdatesCount = 0;
-    _screenUpdatesBeginTime = 0.0f;
-    _averageScreenUpdatesTime = 0.017f;
     
     //UIWindowLevel级别高于状态栏，这样才能显示在状态栏之上
     self.windowLevel = UIWindowLevelStatusBar + 1.0;
@@ -99,55 +108,81 @@ static SPDebugBar* instance = nil;
     
     //文字提示label,显示cpu和内存使用情况
     _tipLabel = [[UILabel alloc] initWithFrame:self.bounds];
+    _tipLabel.userInteractionEnabled = NO;
     _tipLabel.backgroundColor = [UIColor blackColor];
     _tipLabel.textColor = [UIColor greenColor];
     _tipLabel.textAlignment = NSTextAlignmentCenter;
-    _tipLabel.font = [UIFont systemFontOfSize:10];
+    _tipLabel.font = [UIFont systemFontOfSize:8];
     [self addSubview:_tipLabel];
     
     //添加长按手势弹出配置界面
     UILongPressGestureRecognizer* longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(presentDebugVC)];
     [self addGestureRecognizer:longPressGesture];
     
-    //添加单击手势隐藏和显示页面
+    //添加双击手势隐藏和显示页面
     UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showOrHiddenDebugStatusBar)];
+    tapGesture.numberOfTapsRequired = 2;
     [self addGestureRecognizer:tapGesture];
+    
+    //双指点击重新ping
+    UITapGestureRecognizer* doubleGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(startPing)];
+    doubleGesture.numberOfTouchesRequired = 2;
+    [self addGestureRecognizer:doubleGesture];
+    
+    UITapGestureRecognizer* threeGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(stopPing)];
+    threeGesture.numberOfTouchesRequired = 3;
+    [self addGestureRecognizer:threeGesture];
     
     //收到内存警告时调试条背景变色
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveMemoryWarningTip:) name:@"UIApplicationDidReceiveMemoryWarningNotification" object:nil];
     
-    //    //开始监听设备，获取活动消息
-    [self startMonitorDevice];
+    //开始监听设备，获取活动消息
+    self.hidden = NO;
+    [[SPAppInfoHelper shared] setEnable:YES];
+    [self updateDynamicData];
+    [self registerLLAppInfoHelperNotification];
+}
+
+-(void)updateDynamicData
+{
+    NSString *total = [NSByteCountFormatter stringFromByteCount:[[UIDevice currentDevice] totalMemoryBytes] countStyle:NSByteCountFormatterCountStyleFile];
+    
+    NSMutableString *mstr = [[NSMutableString alloc] initWithString:@""];
+    for (NSDictionary *dic in [[SPAppInfoHelper shared] dynamicInfos]) {
+        if ([dic.allKeys.firstObject isEqualToString:@"Memory"]) {
+            [mstr appendFormat:@" %@ %@/%@",dic.allKeys.firstObject,dic.allValues.firstObject,total];
+        }
+        else if ([dic.allKeys.firstObject isEqualToString:@"Speed"]) {
+            [mstr appendFormat:@" %@",dic.allValues.firstObject];
+        }
+        else{
+            [mstr appendFormat:@" %@ %@",dic.allKeys.firstObject,dic.allValues.firstObject];
+        }
+    }
+    
+    if (_pingString.length>0) {
+        [mstr appendString:_pingString];
+    }
+    
+    _tipLabel.text = mstr;
+}
+
+#pragma mark - LLAppInfoHelperNotification
+- (void)registerLLAppInfoHelperNotification
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveLLAppInfoHelperDidUpdateAppInfosNotification:) name:LLAppInfoHelperDidUpdateAppInfosNotificationName object:nil];
+}
+
+- (void)unregisterLLAppInfoHelperNotification
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:LLAppInfoHelperDidUpdateAppInfosNotificationName object:nil];
+}
+
+- (void)didReceiveLLAppInfoHelperDidUpdateAppInfosNotification:(NSNotification *)notification {
+    [self updateDynamicData];
 }
 
 #pragma mark - events
-// 实时更新资源使用情况
-- (void)refreshDeviceInfo
-{
-    if (_isStartWarningNum>0&&_isStartWarningNum<5) {
-        _isStartWarningNum++;
-        [self tipLabelAnimation];
-    }else
-    {
-        _isStartWarningNum = 0;
-        self.tipLabel.backgroundColor = [UIColor blackColor];
-    }
-    
-    UIDevice* device = [UIDevice currentDevice];
-    float cpu = [device cpuUsagePercentage];
-    
-    //CPU
-    NSMutableString* cpuInfo = [NSMutableString stringWithFormat:@"CPU:"];
-    [cpuInfo appendString:[NSString stringWithFormat:@"%.1f%% ", cpu*100]];
-    
-    //Memory
-    NSString* memoryInfo = [NSString stringWithFormat:@"Memory:%.1fM/%.1fM", (double)[device usedMemoryBytes],(double)[device totalMemoryBytes] / 1024.0 / 1024.0];
-    
-    //FPS
-    NSString* fpsInfo = [NSString stringWithFormat:@"FPS:%lu", (unsigned long)self.fps];
-    
-    _tipLabel.text = [NSString stringWithFormat:@"%@ %@ %@", cpuInfo,fpsInfo,memoryInfo];
-}
 
 //收到内存警告，启动动画
 - (void)didReceiveMemoryWarningTip:(NSNotification*)noti
@@ -165,21 +200,6 @@ static SPDebugBar* instance = nil;
     }];
 }
 
-//开始监听设备
-- (void)startMonitorDevice
-{
-    self.hidden = NO;
-    //
-    //    _monitorTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(refreshDeviceInfo) userInfo:nil repeats:YES];
-    //
-    //    [[NSRunLoop mainRunLoop] addTimer:_monitorTimer forMode:NSRunLoopCommonModes];
-    //
-    //    [_monitorTimer fire];
-    
-    //之前使用timer刷新，但是我想加入刷新fps功能，所以就得改成使用displayLink刷新
-    [self setupDisplayLink];
-}
-
 //显示或隐藏Bar
 - (void)showOrHiddenDebugStatusBar
 {
@@ -192,43 +212,29 @@ static SPDebugBar* instance = nil;
     }
 }
 
-- (void)setupDisplayLink
+-(void)startPing
 {
-    self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkAction:)];
-    [self.displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
-}
-
-- (void)displayLinkAction:(CADisplayLink *)displayLink
-{
-    if (self.screenUpdatesBeginTime == 0.0f) {
-        self.screenUpdatesBeginTime = displayLink.timestamp;
-    } else {
-        self.screenUpdatesCount += 1;
-        
-        CFTimeInterval screenUpdatesTime = self.displayLink.timestamp - self.screenUpdatesBeginTime;
-        
-        if (screenUpdatesTime >= 1.0)
-        {
-            CFTimeInterval updatesOverSecond = screenUpdatesTime - 1.0f;
-            int framesOverSecond = updatesOverSecond / self.averageScreenUpdatesTime;
-            
-            self.screenUpdatesCount -= framesOverSecond;
-            if (self.screenUpdatesCount < 0) {
-                self.screenUpdatesCount = 0;
+    if (_pingAddress.length>0) {
+        __weak typeof(self) weakSelf = self;
+        self.pingService = [STDPingServices startPingAddress:_pingAddress callbackHandler:^(STDPingItem *pingItem, NSArray *pingItems) {
+            if (pingItem.status != STDPingStatusFinished) {
+                NSLog(@"网络延迟  %.3fms", pingItem.timeMilliseconds);
+    //            延迟时间,毫秒
+                weakSelf.pingString = [NSString stringWithFormat:@" delay %.1fms",pingItem.timeMilliseconds];
+            }else {
+                NSLog(@"%@", [STDPingItem statisticsWithPingItems:pingItems]);
+                weakSelf.pingString = @" delay finish";
             }
-            
-            [self updateFPS];
-        }
+        }];
     }
 }
 
-- (void)updateFPS
+-(void)stopPing
 {
-    self.fps = self.screenUpdatesCount;
-    self.screenUpdatesCount = 0;
-    self.screenUpdatesBeginTime = 0.0f;
-    
-    [self refreshDeviceInfo];
+    if (self.pingService) {
+        [self.pingService cancel];
+        self.pingService = nil;
+    }
 }
 
 #pragma mark - 配置服务器地址
