@@ -81,32 +81,24 @@
 		1A94F38125921E6C00CD646E /* AppInfo */ = {
 			isa = PBXGroup;
 			children = (
-				1A94F38225921E6C00CD646E /* Function */,
-			);
-			path = AppInfo;
-			sourceTree = "<group>";
-		};
-		1A94F38225921E6C00CD646E /* Function */ = {
-			isa = PBXGroup;
-			children = (
-				1A94F39125921E6C00CD646E /* SPAppInfoHelper.h */,
-				1A94F39025921E6C00CD646E /* SPAppInfoHelper.m */,
 				1A94F38325921E6C00CD646E /* network */,
 			);
-			path = Function;
+			path = AppInfo;
 			sourceTree = "<group>";
 		};
 		1A94F38325921E6C00CD646E /* network */ = {
 			isa = PBXGroup;
 			children = (
-				1A94F38625921E6C00CD646E /* SPSimplePing.h */,
+				1A94F39125921E6C00CD646E /* SPAppInfoHelper.h */,
+				1A94F39025921E6C00CD646E /* SPAppInfoHelper.m */,
 				1A94F38725921E6C00CD646E /* SPNetWorkReachability.h */,
-				1A94F38825921E6C00CD646E /* SPPingServices.m */,
-				1A94F38925921E6C00CD646E /* UIDevice+SPAppInfo.h */,
-				1A94F38A25921E6C00CD646E /* SPSimplePing.m */,
 				1A94F38D25921E6C00CD646E /* SPNetWorkReachability.m */,
-				1A94F38E25921E6C00CD646E /* SPPingServices.h */,
+				1A94F38925921E6C00CD646E /* UIDevice+SPAppInfo.h */,
 				1A94F38F25921E6C00CD646E /* UIDevice+SPAppInfo.m */,
+				1A94F38625921E6C00CD646E /* SPSimplePing.h */,
+				1A94F38A25921E6C00CD646E /* SPSimplePing.m */,
+				1A94F38825921E6C00CD646E /* SPPingServices.m */,
+				1A94F38E25921E6C00CD646E /* SPPingServices.h */,
 			);
 			path = network;
 			sourceTree = "<group>";
