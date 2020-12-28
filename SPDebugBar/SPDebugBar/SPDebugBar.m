@@ -13,7 +13,6 @@
 #import "LSPCleanVC.h"
 #import "SPPingServices.h"
 #import "SPAppInfoHelper.h"
-#import "SPNetWorkReachability.h"
 
 #define SP_ChangeAddress_KEY SP_LANGUAGE_IS_CHINESE? @"切换服务器" : @"Change Server"
 #define SP_ChangeNSUserDefaults_KEY SP_LANGUAGE_IS_CHINESE? @"修改NSUserDefaults":@"Change NSUserDefaults"//服务器列表每组的名称键值

@@ -78,31 +78,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1A94F38125921E6C00CD646E /* AppInfo */ = {
-			isa = PBXGroup;
-			children = (
-				1A94F38325921E6C00CD646E /* network */,
-			);
-			path = AppInfo;
-			sourceTree = "<group>";
-		};
-		1A94F38325921E6C00CD646E /* network */ = {
-			isa = PBXGroup;
-			children = (
-				1A94F39125921E6C00CD646E /* SPAppInfoHelper.h */,
-				1A94F39025921E6C00CD646E /* SPAppInfoHelper.m */,
-				1A94F38725921E6C00CD646E /* SPNetWorkReachability.h */,
-				1A94F38D25921E6C00CD646E /* SPNetWorkReachability.m */,
-				1A94F38925921E6C00CD646E /* UIDevice+SPAppInfo.h */,
-				1A94F38F25921E6C00CD646E /* UIDevice+SPAppInfo.m */,
-				1A94F38625921E6C00CD646E /* SPSimplePing.h */,
-				1A94F38A25921E6C00CD646E /* SPSimplePing.m */,
-				1A94F38825921E6C00CD646E /* SPPingServices.m */,
-				1A94F38E25921E6C00CD646E /* SPPingServices.h */,
-			);
-			path = network;
-			sourceTree = "<group>";
-		};
 		E15C00AA1E1D0A5700E0219B = {
 			isa = PBXGroup;
 			children = (
@@ -149,7 +124,16 @@
 		E15C00CD1E1D0AAF00E0219B /* SPDebugBar */ = {
 			isa = PBXGroup;
 			children = (
-				1A94F38125921E6C00CD646E /* AppInfo */,
+				1A94F39125921E6C00CD646E /* SPAppInfoHelper.h */,
+				1A94F39025921E6C00CD646E /* SPAppInfoHelper.m */,
+				1A94F38725921E6C00CD646E /* SPNetWorkReachability.h */,
+				1A94F38D25921E6C00CD646E /* SPNetWorkReachability.m */,
+				1A94F38925921E6C00CD646E /* UIDevice+SPAppInfo.h */,
+				1A94F38F25921E6C00CD646E /* UIDevice+SPAppInfo.m */,
+				1A94F38625921E6C00CD646E /* SPSimplePing.h */,
+				1A94F38A25921E6C00CD646E /* SPSimplePing.m */,
+				1A94F38825921E6C00CD646E /* SPPingServices.m */,
+				1A94F38E25921E6C00CD646E /* SPPingServices.h */,
 				E15C00CE1E1D0AAF00E0219B /* SPDebugBar.h */,
 				E15C00CF1E1D0AAF00E0219B /* SPDebugBar.m */,
 				1EAA41612052801E005BA1D0 /* SPDebugVC.h */,
