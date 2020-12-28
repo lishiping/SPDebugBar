@@ -2,9 +2,8 @@
 Pod::Spec.new do |s|
 
   s.name         = "SPDebugBar"
-  s.version      = "1.0.2"
+  s.version      = "1.1.0"
   s.summary      = "Switch address,Modify NSUserDefaults,Show CPU,Memory,FPS.切换服务器地址,修改NSUserDefaults,显示CPU,内存,FPS"
-
 
   s.homepage     = "https://github.com/lishiping/SPDebugBar.git"
   s.license      = "LICENSE"
