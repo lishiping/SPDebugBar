@@ -11,7 +11,7 @@
 #import "SPServerListVC.h"
 #import "SPNSUserDefaultsVC.h"
 #import "LSPCleanVC.h"
-#import "STDPingServices.h"
+#import "SPPingServices.h"
 #import "SPAppInfoHelper.h"
 #import "SPNetWorkReachability.h"
 
@@ -32,7 +32,7 @@
 
 @property (atomic,copy)NSString *pingAddress;//ping地址
 @property (atomic,copy)NSString *pingString;//延迟时间,毫秒
-@property (nonatomic, strong) STDPingServices *pingService;
+@property (nonatomic, strong) SPPingServices *pingService;
 
 @end
 
@@ -40,7 +40,7 @@
 
 #pragma mark - shareInstance
 static SPDebugBar* instance = nil;
-static STDPingServices *pingService = nil;
+static SPPingServices *pingService = nil;
 + (id)sharedInstanceWithServerArray:(NSArray*)serverArray
            selectedServerArrayBlock:(SPArrayResultBlock)selectedServerArrayBlock
                   otherSectionArray:(NSArray *)otherSectionArray
@@ -216,13 +216,13 @@ static STDPingServices *pingService = nil;
 {
     if (_pingAddress.length>0) {
         __weak typeof(self) weakSelf = self;
-        self.pingService = [STDPingServices startPingAddress:_pingAddress callbackHandler:^(STDPingItem *pingItem, NSArray *pingItems) {
-            if (pingItem.status != STDPingStatusFinished) {
+        self.pingService = [SPPingServices startPingAddress:_pingAddress callbackHandler:^(SPPingItem *pingItem, NSArray *pingItems) {
+            if (pingItem.status != SPPingStatusFinished) {
                 NSLog(@"网络延迟  %.3fms", pingItem.timeMilliseconds);
     //            延迟时间,毫秒
                 weakSelf.pingString = [NSString stringWithFormat:@" delay %.1fms",pingItem.timeMilliseconds];
             }else {
-                NSLog(@"%@", [STDPingItem statisticsWithPingItems:pingItems]);
+                NSLog(@"%@", [SPPingItem statisticsWithPingItems:pingItems]);
                 weakSelf.pingString = @" delay finish";
             }
         }];

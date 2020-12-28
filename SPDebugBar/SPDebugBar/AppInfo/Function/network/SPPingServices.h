@@ -3,11 +3,11 @@
 //  ApolloApi
 //
 //  Created by lishiping on 2020/8/17.
-//  Copyright © 2020 新东方. All rights reserved.
+//  Copyright © 2020 lishiping. All rights reserved.
 //
 
 //思想： 还是利用app  demo 中使用 simpleping  作为属性 去ping 实现其代理
-//
+//  作者借鉴STDPingServices功能来的
 
 #import <Foundation/Foundation.h>
 #import <CoreGraphics/CoreGraphics.h>

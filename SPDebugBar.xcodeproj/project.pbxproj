@@ -7,10 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1A94F39225921E6C00CD646E /* STSimplePing.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A94F38425921E6C00CD646E /* STSimplePing.m */; };
 		1A94F39325921E6C00CD646E /* SPPingServices.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A94F38825921E6C00CD646E /* SPPingServices.m */; };
 		1A94F39425921E6C00CD646E /* SPSimplePing.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A94F38A25921E6C00CD646E /* SPSimplePing.m */; };
-		1A94F39525921E6C00CD646E /* STDPingServices.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A94F38B25921E6C00CD646E /* STDPingServices.m */; };
 		1A94F39625921E6C00CD646E /* SPNetWorkReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A94F38D25921E6C00CD646E /* SPNetWorkReachability.m */; };
 		1A94F39725921E6C00CD646E /* UIDevice+SPAppInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A94F38F25921E6C00CD646E /* UIDevice+SPAppInfo.m */; };
 		1A94F39825921E6C00CD646E /* SPAppInfoHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A94F39025921E6C00CD646E /* SPAppInfoHelper.m */; };
@@ -31,15 +29,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1A94F38425921E6C00CD646E /* STSimplePing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STSimplePing.m; sourceTree = "<group>"; };
-		1A94F38525921E6C00CD646E /* STDPingServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDPingServices.h; sourceTree = "<group>"; };
 		1A94F38625921E6C00CD646E /* SPSimplePing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPSimplePing.h; sourceTree = "<group>"; };
 		1A94F38725921E6C00CD646E /* SPNetWorkReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPNetWorkReachability.h; sourceTree = "<group>"; };
 		1A94F38825921E6C00CD646E /* SPPingServices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPPingServices.m; sourceTree = "<group>"; };
 		1A94F38925921E6C00CD646E /* UIDevice+SPAppInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+SPAppInfo.h"; sourceTree = "<group>"; };
 		1A94F38A25921E6C00CD646E /* SPSimplePing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPSimplePing.m; sourceTree = "<group>"; };
-		1A94F38B25921E6C00CD646E /* STDPingServices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDPingServices.m; sourceTree = "<group>"; };
-		1A94F38C25921E6C00CD646E /* STSimplePing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STSimplePing.h; sourceTree = "<group>"; };
 		1A94F38D25921E6C00CD646E /* SPNetWorkReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPNetWorkReachability.m; sourceTree = "<group>"; };
 		1A94F38E25921E6C00CD646E /* SPPingServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPPingServices.h; sourceTree = "<group>"; };
 		1A94F38F25921E6C00CD646E /* UIDevice+SPAppInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+SPAppInfo.m"; sourceTree = "<group>"; };
@@ -105,15 +99,11 @@
 		1A94F38325921E6C00CD646E /* network */ = {
 			isa = PBXGroup;
 			children = (
-				1A94F38425921E6C00CD646E /* STSimplePing.m */,
-				1A94F38525921E6C00CD646E /* STDPingServices.h */,
 				1A94F38625921E6C00CD646E /* SPSimplePing.h */,
 				1A94F38725921E6C00CD646E /* SPNetWorkReachability.h */,
 				1A94F38825921E6C00CD646E /* SPPingServices.m */,
 				1A94F38925921E6C00CD646E /* UIDevice+SPAppInfo.h */,
 				1A94F38A25921E6C00CD646E /* SPSimplePing.m */,
-				1A94F38B25921E6C00CD646E /* STDPingServices.m */,
-				1A94F38C25921E6C00CD646E /* STSimplePing.h */,
 				1A94F38D25921E6C00CD646E /* SPNetWorkReachability.m */,
 				1A94F38E25921E6C00CD646E /* SPPingServices.h */,
 				1A94F38F25921E6C00CD646E /* UIDevice+SPAppInfo.m */,
@@ -260,7 +250,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A94F39625921E6C00CD646E /* SPNetWorkReachability.m in Sources */,
-				1A94F39225921E6C00CD646E /* STSimplePing.m in Sources */,
 				1EAA416620529879005BA1D0 /* SPNSUserDefaultsVC.m in Sources */,
 				1ED8812A2074EBBD00491EEC /* ABTestVC.m in Sources */,
 				92C1CC89240577AA009743D2 /* LSPCleanVC.m in Sources */,
@@ -268,7 +257,6 @@
 				1A94F39325921E6C00CD646E /* SPPingServices.m in Sources */,
 				1EAA41632052801E005BA1D0 /* SPDebugVC.m in Sources */,
 				E15C00DB1E1D0AAF00E0219B /* SPServerListVC.m in Sources */,
-				1A94F39525921E6C00CD646E /* STDPingServices.m in Sources */,
 				E15C00BB1E1D0A5700E0219B /* AppDelegate.m in Sources */,
 				1A94F39725921E6C00CD646E /* UIDevice+SPAppInfo.m in Sources */,
 				E15C00B81E1D0A5700E0219B /* main.m in Sources */,

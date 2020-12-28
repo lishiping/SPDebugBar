@@ -3,7 +3,7 @@
 //  ApolloApi
 //
 //  Created by lishiping on 2020/8/17.
-//  Copyright © 2020 新东方. All rights reserved.
+//  Copyright © 2020 lishiping. All rights reserved.
 //
 
 #import "SPPingServices.h"
