@@ -28,6 +28,14 @@
     //加载调试工具
     [self loadDebugTool];
     
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [SPDebugBar hide];
+    });
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [SPDebugBar show];
+    });
+    
     [application setStatusBarHidden:NO];
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];

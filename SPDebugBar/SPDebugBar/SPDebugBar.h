@@ -195,4 +195,8 @@
 /// @param address 网址
 +(void)startPingAddress:(NSString*)address;
 
++(void)show;
+
++(void)hide;
+
 @end

@@ -72,6 +72,19 @@ static SPPingServices *pingService = nil;
     [instance startPing];
 }
 
++(void)show
+{
+    if (instance) {
+        instance.hidden = NO;
+    }
+}
+
++(void)hide
+{
+    if (instance) {
+        instance.hidden = YES;
+    }
+}
 #pragma mark - init
 
 + (id)sharedInstanceWithFrame:(CGRect)frame
