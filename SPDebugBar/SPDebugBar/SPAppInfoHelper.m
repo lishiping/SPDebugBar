@@ -1,5 +1,5 @@
 //
-//  LLAppInfoHelper.m
+//  SPAppInfoHelper.m
 //
 //  Copyright (c) 2018 LLDebugTool Software Foundation (https://github.com/HDB-Li/LLDebugTool)
 //
@@ -34,15 +34,15 @@
 
 static SPAppInfoHelper *_instance = nil;
 
-NSNotificationName const LLAppInfoHelperDidUpdateAppInfosNotificationName = @"LLAppInfoHelperDidUpdateAppInfosNotificationName";
-NSString * const LLAppInfoHelperCPUKey = @"LLAppInfoHelperCPUKey";
-NSString * const LLAppInfoHelperMemoryUsedKey = @"LLAppInfoHelperMemoryUsedKey";
-NSString * const LLAppInfoHelperMemoryFreeKey = @"LLAppInfoHelperMemoryFreeKey";
-NSString * const LLAppInfoHelperMemoryTotalKey = @"LLAppInfoHelperMemoryTotalKey";
-NSString * const LLAppInfoHelperFPSKey = @"LLAppInfoHelperFPSKey";
-NSString * const LLAppInfoHelperRequestDataTrafficKey = @"LLAppInfoHelperRequestDataTrafficKey";
-NSString * const LLAppInfoHelperResponseDataTrafficKey = @"LLAppInfoHelperResponseDataTrafficKey";
-NSString * const LLAppInfoHelperTotalDataTrafficKey = @"LLAppInfoHelperTotalDataTrafficKey";
+NSNotificationName const SPAppInfoHelperDidUpdateAppInfosNotificationName = @"SPAppInfoHelperDidUpdateAppInfosNotificationName";
+NSString * const SPAppInfoHelperCPUKey = @"SPAppInfoHelperCPUKey";
+NSString * const SPAppInfoHelperMemoryUsedKey = @"SPAppInfoHelperMemoryUsedKey";
+NSString * const SPAppInfoHelperMemoryFreeKey = @"SPAppInfoHelperMemoryFreeKey";
+NSString * const SPAppInfoHelperMemoryTotalKey = @"SPAppInfoHelperMemoryTotalKey";
+NSString * const SPAppInfoHelperFPSKey = @"SPAppInfoHelperFPSKey";
+NSString * const SPAppInfoHelperRequestDataTrafficKey = @"SPAppInfoHelperRequestDataTrafficKey";
+NSString * const SPAppInfoHelperResponseDataTrafficKey = @"SPAppInfoHelperResponseDataTrafficKey";
+NSString * const SPAppInfoHelperTotalDataTrafficKey = @"SPAppInfoHelperTotalDataTrafficKey";
 
 @interface SPAppInfoHelper ()
 {
@@ -399,7 +399,7 @@ NSString * const LLAppInfoHelperTotalDataTrafficKey = @"LLAppInfoHelperTotalData
 
 - (void)postAppInfoHelperDidUpdateAppInfosNotification {
     if ([[NSThread currentThread] isMainThread]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:LLAppInfoHelperDidUpdateAppInfosNotificationName object:[self dynamicInfos] userInfo:@{LLAppInfoHelperCPUKey:@(_cpu),LLAppInfoHelperFPSKey:@(_fps),LLAppInfoHelperMemoryFreeKey:@(_freeMemory),LLAppInfoHelperMemoryUsedKey:@(_usedMemory),LLAppInfoHelperMemoryTotalKey:@(_totalMemory),LLAppInfoHelperRequestDataTrafficKey:@(_requestDataTraffic),LLAppInfoHelperResponseDataTrafficKey:@(_responseDataTraffic),LLAppInfoHelperTotalDataTrafficKey:@(_totalDataTraffic)}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:SPAppInfoHelperDidUpdateAppInfosNotificationName object:[self dynamicInfos] userInfo:@{SPAppInfoHelperCPUKey:@(_cpu),SPAppInfoHelperFPSKey:@(_fps),SPAppInfoHelperMemoryFreeKey:@(_freeMemory),SPAppInfoHelperMemoryUsedKey:@(_usedMemory),SPAppInfoHelperMemoryTotalKey:@(_totalMemory),SPAppInfoHelperRequestDataTrafficKey:@(_requestDataTraffic),SPAppInfoHelperResponseDataTrafficKey:@(_responseDataTraffic),SPAppInfoHelperTotalDataTrafficKey:@(_totalDataTraffic)}];
     } else {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self postAppInfoHelperDidUpdateAppInfosNotification];

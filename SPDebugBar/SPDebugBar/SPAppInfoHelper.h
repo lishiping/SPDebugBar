@@ -1,5 +1,5 @@
 //
-//  LLAppInfoHelper.h
+//  SPAppInfoHelper.h
 //
 //  Copyright (c) 2018 LLDebugTool Software Foundation (https://github.com/HDB-Li/LLDebugTool)
 //
@@ -34,16 +34,16 @@ NS_ASSUME_NONNULL_BEGIN
  Response data traffic is download data.
  Total data traffic is total data.
  */
-FOUNDATION_EXPORT NSNotificationName const LLAppInfoHelperDidUpdateAppInfosNotificationName;
+FOUNDATION_EXPORT NSNotificationName const SPAppInfoHelperDidUpdateAppInfosNotificationName;
 
-FOUNDATION_EXPORT NSString * const LLAppInfoHelperCPUKey;
-FOUNDATION_EXPORT NSString * const LLAppInfoHelperMemoryUsedKey;
-FOUNDATION_EXPORT NSString * const LLAppInfoHelperMemoryFreeKey;
-FOUNDATION_EXPORT NSString * const LLAppInfoHelperMemoryTotalKey;
-FOUNDATION_EXPORT NSString * const LLAppInfoHelperFPSKey;
-FOUNDATION_EXPORT NSString * const LLAppInfoHelperRequestDataTrafficKey;
-FOUNDATION_EXPORT NSString * const LLAppInfoHelperResponseDataTrafficKey;
-FOUNDATION_EXPORT NSString * const LLAppInfoHelperTotalDataTrafficKey;
+FOUNDATION_EXPORT NSString * const SPAppInfoHelperCPUKey;
+FOUNDATION_EXPORT NSString * const SPAppInfoHelperMemoryUsedKey;
+FOUNDATION_EXPORT NSString * const SPAppInfoHelperMemoryFreeKey;
+FOUNDATION_EXPORT NSString * const SPAppInfoHelperMemoryTotalKey;
+FOUNDATION_EXPORT NSString * const SPAppInfoHelperFPSKey;
+FOUNDATION_EXPORT NSString * const SPAppInfoHelperRequestDataTrafficKey;
+FOUNDATION_EXPORT NSString * const SPAppInfoHelperResponseDataTrafficKey;
+FOUNDATION_EXPORT NSString * const SPAppInfoHelperTotalDataTrafficKey;
 
 /**
  Monitoring app's properties.

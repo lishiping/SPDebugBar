@@ -107,7 +107,7 @@ static SPPingServices *pingService = nil;
 
 -(void)dealloc
 {
-    [self unregisterLLAppInfoHelperNotification];
+    [self unregisterSPAppInfoHelperNotification];
 }
 -(void)initialize
 {
@@ -152,7 +152,7 @@ static SPPingServices *pingService = nil;
     self.hidden = NO;
     [[SPAppInfoHelper shared] setEnable:YES];
     [self updateDynamicData];
-    [self registerLLAppInfoHelperNotification];
+    [self registerSPAppInfoHelperNotification];
 }
 
 -(void)updateDynamicData
@@ -179,18 +179,18 @@ static SPPingServices *pingService = nil;
     _tipLabel.text = mstr;
 }
 
-#pragma mark - LLAppInfoHelperNotification
-- (void)registerLLAppInfoHelperNotification
+#pragma mark - SPAppInfoHelperNotification
+- (void)registerSPAppInfoHelperNotification
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveLLAppInfoHelperDidUpdateAppInfosNotification:) name:LLAppInfoHelperDidUpdateAppInfosNotificationName object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveSPAppInfoHelperDidUpdateAppInfosNotification:) name:SPAppInfoHelperDidUpdateAppInfosNotificationName object:nil];
 }
 
-- (void)unregisterLLAppInfoHelperNotification
+- (void)unregisterSPAppInfoHelperNotification
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:LLAppInfoHelperDidUpdateAppInfosNotificationName object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SPAppInfoHelperDidUpdateAppInfosNotificationName object:nil];
 }
 
-- (void)didReceiveLLAppInfoHelperDidUpdateAppInfosNotification:(NSNotification *)notification {
+- (void)didReceiveSPAppInfoHelperDidUpdateAppInfosNotification:(NSNotification *)notification {
     [self updateDynamicData];
 }
 
